@@ -14,8 +14,8 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      overflow: hidden;
-      background: radial-gradient(circle at bottom, #2d121d 0%, #111827 70%, #030712 100%);
+      overflow-x: hidden;
+      background: radial-gradient(circle at bottom, #2a0813 0%, #111827 65%, #030712 100%);
       color: #fff;
       min-height: 100vh;
       user-select: none;
@@ -41,7 +41,7 @@
     }
 
     .welcome-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
       padding: 3rem 2.5rem;
       border-radius: 28px;
       text-align: center;
@@ -73,25 +73,49 @@
       margin-bottom: 2rem;
     }
 
+    /* BOTONES */
     .btn-main {
       background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
       color: white;
       border: none;
-      padding: 1rem 2.5rem;
+      padding: 0.9rem 2.2rem;
       border-radius: 50px;
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       cursor: pointer;
       box-shadow: 0 10px 25px rgba(234, 179, 8, 0.4);
       transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .btn-main:hover {
       transform: translateY(-3px) scale(1.04);
       box-shadow: 0 15px 35px rgba(234, 179, 8, 0.6);
+      background: linear-gradient(135deg, #facc15 0%, #d97706 100%);
     }
 
-    /* CANVAS DE FONDO Y EFECTOS */
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.65rem 1.3rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(250, 204, 21, 0.25);
+      border-color: #facc15;
+      transform: translateY(-2px);
+    }
+
+    /* CANVAS */
     #garden-canvas, #fx-canvas {
       position: fixed;
       top: 0;
@@ -103,93 +127,86 @@
     #garden-canvas { z-index: 5; }
     #fx-canvas { z-index: 500; }
 
-    /* CONTENEDOR PRINCIPAL Y CARTA */
+    /* LAYOUT PRINCIPAL (PERMANENTE) */
     .main-layout {
       position: relative;
       z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
+      padding: 2rem 1rem 6rem 1rem;
       min-height: 100vh;
       pointer-events: none;
     }
 
+    /* CARTA PERMANENTE */
     .letter-card {
       background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(12px);
-      padding: 2.5rem 3rem;
+      backdrop-filter: blur(14px);
+      padding: 2rem 2.5rem;
       border-radius: 24px;
       text-align: center;
       max-width: 650px;
       width: 90%;
       pointer-events: auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(234, 179, 8, 0.3);
-      border: 1px solid rgba(254, 240, 138, 0.4);
-      opacity: 0;
-      transform: translateY(30px) scale(0.9);
-      transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .letter-card.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(234, 179, 8, 0.25);
+      border: 1px solid rgba(254, 240, 138, 0.35);
+      margin-bottom: 1.5rem;
     }
 
     .letter-card h1 {
       font-family: 'Dancing Script', cursive;
       color: #facc15;
-      font-size: 3.5rem;
-      margin-bottom: 0.8rem;
+      font-size: 3.2rem;
+      margin-bottom: 0.5rem;
       text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);
     }
 
     .letter-card p {
       color: #f3f4f6;
-      font-size: 1.15rem;
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
       font-weight: 300;
     }
 
-    /* POLAROID Y GALERÍA DE FOTOS DE PAREJA */
+    /* SECCIÓN DE FOTOS CONTROLADA POR EL USUARIO */
     .photo-stage {
       position: relative;
-      margin-top: 1.5rem;
+      margin: 0.5rem 0 1.5rem 0;
       pointer-events: auto;
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 380px;
     }
 
+    /* MODO SINGLE Y MODO COLLAGE */
     .polaroid-card {
       background: #ffffff;
       padding: 14px 14px 45px 14px;
       border-radius: 6px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(250, 204, 21, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(250, 204, 21, 0.25);
       transform: rotate(-2deg);
       transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      max-width: 320px;
-      opacity: 0;
+      max-width: 310px;
       display: none;
     }
 
     .polaroid-card.active {
       display: block;
-      opacity: 1;
+      animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .polaroid-card.collage-mode {
       position: absolute;
       display: block !important;
-      opacity: 1 !important;
       transition: all 1.2s ease-in-out;
     }
 
     .polaroid-img-container {
-      width: 290px;
-      height: 290px;
+      width: 280px;
+      height: 280px;
       overflow: hidden;
       border-radius: 4px;
       background: #111;
@@ -213,7 +230,17 @@
       font-weight: 700;
     }
 
-    /* BOTÓN DE MÚSICA REUTILIZABLE */
+    /* BARRA DE CONTROLES MANUALES */
+    .action-bar {
+      pointer-events: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 1rem;
+    }
+
+    /* BOTÓN MÚSICA ESQUINA */
     .music-toggle {
       position: fixed;
       top: 20px;
@@ -232,6 +259,11 @@
     @keyframes pulseFloat {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8) rotate(-5deg); opacity: 0; }
+      100% { transform: scale(1) rotate(-2deg); opacity: 1; }
     }
   </style>
 </head>
@@ -259,20 +291,19 @@
   <canvas id="fx-canvas"></canvas>
 
   <div class="main-layout">
-    <!-- CARTA INICIAL -->
+    <!-- CARTA SIEMPRE VISIBLE -->
     <div id="letter" class="letter-card">
       <h1>Feliz Día de la Primavera 💛</h1>
-      <p>Como las flores amarillas que buscan la luz del sol, mi corazón siempre florece a tu lado. Gracias por llenar mi vida de alegría, amor y momentos inolvidables.</p>
-      <button id="continue-btn" class="btn-main">Nuestros Recuerdos 📸</button>
+      <p id="letter-paragraph">Como las flores amarillas que buscan la luz del sol, mi corazón siempre florece a tu lado. Gracias por llenar mi vida de alegría, amor y momentos inolvidables.</p>
     </div>
 
-    <!-- ETAPA DE FOTOS DE PAREJA -->
+    <!-- ETAPA DE FOTOS CONTROLADA -->
     <div id="photo-stage" class="photo-stage">
-      <div class="polaroid-card" id="card-0">
+      <div class="polaroid-card active" id="card-0">
         <div class="polaroid-img-container">
           <img src="./foto1.jpg" alt="Foto 1" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
         </div>
-        <div class="polaroid-caption">Momento Especial 💛</div>
+        <div class="polaroid-caption">Vivimos 💛</div>
       </div>
 
       <div class="polaroid-card" id="card-1">
@@ -296,6 +327,15 @@
         <div class="polaroid-caption">Amor Infinito 🌸</div>
       </div>
     </div>
+
+    <!-- BOTONES DE NAVEGACIÓN Y EFECTOS CONTROLADOS POR TI -->
+    <div class="action-bar">
+      <button id="next-photo-btn" class="btn-main">📸 </button>
+      <button id="fireworks-btn" class="btn-secondary">🎆 </button>
+      <button id="hearts-btn" class="btn-secondary">💖 </button>
+      <button id="rebloom-btn" class="btn-secondary">🌻 </button>
+      <button id="collage-btn" class="btn-secondary">🖼️ Te Amo mi Miau</button>
+    </div>
   </div>
 
   <script>
@@ -311,6 +351,8 @@
     let seeds = [];
     let time = 0;
     let isPlayingMusic = false;
+    let currentPhotoIndex = 0;
+    const totalPhotos = 4;
 
     function resizeCanvas() {
       gardenCanvas.width = fxCanvas.width = window.innerWidth;
@@ -319,7 +361,7 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    /* --- CLASE FLOR AMARILLA --- */
+    /* --- CLASE FLOR REALISTA (GIRASOLES, ROSAS AMARILLAS Y MARGARITAS DETALLADAS) --- */
     class Flower {
       constructor(x, y, scale = 1) {
         this.x = x;
@@ -331,17 +373,24 @@
         this.petalProgress = 0;
         this.type = Math.random();
 
-        if (this.type < 0.5) {
-          this.petalCount = 14;
-          this.maxPetalSize = (Math.random() * 20 + 30) * this.scale;
-          this.palette = { inner: '#eab308', outer: '#fef08a', center1: '#451a03', center2: '#78350f' };
+        if (this.type < 0.4) {
+          // GIRASOL REALISTA CON MÚLTIPLES CAPAS DE PÉTALOS
+          this.petalLayers = [16, 12];
+          this.maxPetalSize = (Math.random() * 18 + 28) * this.scale;
+          this.palette = { inner: '#eab308', outer: '#fef08a', center1: '#321403', center2: '#78350f' };
+        } else if (this.type < 0.7) {
+          // ROSA AMARILLA / DORADA
+          this.petalLayers = [12, 8];
+          this.maxPetalSize = (Math.random() * 16 + 24) * this.scale;
+          this.palette = { inner: '#f59e0b', outer: '#fef08a', center1: '#b45309', center2: '#d97706' };
         } else {
-          this.petalCount = 10;
-          this.maxPetalSize = (Math.random() * 18 + 26) * this.scale;
-          this.palette = { inner: '#f59e0b', outer: '#fef08a', center1: '#ca8a04', center2: '#eab308' };
+          // MARGARITA SILVESTRE
+          this.petalLayers = [14];
+          this.maxPetalSize = (Math.random() * 14 + 20) * this.scale;
+          this.palette = { inner: '#ffffff', outer: '#fef9c3', center1: '#eab308', center2: '#ca8a04' };
         }
 
-        this.growthSpeed = Math.random() * 2 + 1.5;
+        this.growthSpeed = Math.random() * 1.8 + 1.2;
         this.swayOffset = Math.random() * 100;
       }
 
@@ -354,46 +403,70 @@
       }
 
       draw(ctx) {
-        const sway = Math.sin(time * 0.002 + this.swayOffset) * (12 * this.scale) * (this.stemHeight / this.maxStemHeight);
+        const sway = Math.sin(time * 0.002 + this.swayOffset) * (14 * this.scale) * (this.stemHeight / this.maxStemHeight);
         const flowerHeadX = this.x + sway;
         const currentY = window.innerHeight - this.stemHeight;
 
+        // Tallo con Gradiente y Sombras
         const stemGrad = ctx.createLinearGradient(this.x, window.innerHeight, flowerHeadX, currentY);
-        stemGrad.addColorStop(0, '#15803d');
+        stemGrad.addColorStop(0, '#14532d');
+        stemGrad.addColorStop(0.5, '#15803d');
         stemGrad.addColorStop(1, '#4ade80');
 
         ctx.beginPath();
         ctx.moveTo(this.x, window.innerHeight);
         ctx.quadraticCurveTo(this.x + sway * 0.5, window.innerHeight - this.stemHeight * 0.5, flowerHeadX, currentY);
         ctx.strokeStyle = stemGrad;
-        ctx.lineWidth = Math.max(3, 6 * this.scale);
+        ctx.lineWidth = Math.max(3, 7 * this.scale);
         ctx.stroke();
 
+        // Hojas Realistas
+        if (this.stemHeight > this.maxStemHeight * 0.35) {
+          ctx.save();
+          ctx.translate(this.x + sway * 0.3, window.innerHeight - this.stemHeight * 0.4);
+          ctx.rotate(0.35);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 22 * this.scale, 9 * this.scale, 0, 0, Math.PI * 2);
+          ctx.fillStyle = '#16a34a';
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Flor
         if (this.petalProgress > 0) {
           ctx.save();
           ctx.translate(flowerHeadX, currentY);
           const currentPetalSize = this.maxPetalSize * this.petalProgress;
 
-          for (let i = 0; i < this.petalCount; i++) {
-            const angle = (Math.PI * 2 / this.petalCount) * i;
-            ctx.save();
-            ctx.rotate(angle);
+          // Dibujar Capas de Pétalos
+          this.petalLayers.forEach((count, layerIdx) => {
+            const layerScale = 1 - (layerIdx * 0.2);
+            for (let i = 0; i < count; i++) {
+              const angle = (Math.PI * 2 / count) * i + (layerIdx * 0.2);
+              ctx.save();
+              ctx.rotate(angle);
 
-            const petalGrad = ctx.createRadialGradient(0, 0, 0, 0, currentPetalSize, currentPetalSize);
-            petalGrad.addColorStop(0, this.palette.inner);
-            petalGrad.addColorStop(1, this.palette.outer);
+              const petalGrad = ctx.createRadialGradient(0, 0, 0, 0, currentPetalSize * layerScale, currentPetalSize * layerScale);
+              petalGrad.addColorStop(0, this.palette.inner);
+              petalGrad.addColorStop(0.8, this.palette.outer);
+              petalGrad.addColorStop(1, '#ffffff');
 
-            ctx.beginPath();
-            ctx.ellipse(0, currentPetalSize * 0.7, currentPetalSize * 0.32, currentPetalSize * 0.75, 0, 0, Math.PI * 2);
-            ctx.fillStyle = petalGrad;
-            ctx.fill();
-            ctx.restore();
-          }
+              ctx.beginPath();
+              ctx.ellipse(0, currentPetalSize * layerScale * 0.7, currentPetalSize * layerScale * 0.3, currentPetalSize * layerScale * 0.75, 0, 0, Math.PI * 2);
+              ctx.fillStyle = petalGrad;
+              ctx.shadowColor = 'rgba(0,0,0,0.2)';
+              ctx.shadowBlur = 5;
+              ctx.fill();
+              ctx.restore();
+            }
+          });
 
+          // Centro de Polén
           const centerRadius = currentPetalSize * 0.38;
           const centerGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, centerRadius);
           centerGrad.addColorStop(0, this.palette.center1);
-          centerGrad.addColorStop(1, this.palette.center2);
+          centerGrad.addColorStop(0.8, this.palette.center2);
+          centerGrad.addColorStop(1, '#ca8a04');
 
           ctx.beginPath();
           ctx.arc(0, 0, centerRadius, 0, Math.PI * 2);
@@ -404,17 +477,17 @@
       }
     }
 
-    /* --- EFECTOS DE CORAZONES Y FUEGOS ARTIFICIALES --- */
+    /* --- EFECTOS MEJORADOS: CORAZONES REALISTAS --- */
     class HeartParticle {
       constructor(x, y, isExplosion = false) {
         this.x = x;
         this.y = y;
-        this.size = Math.random() * 16 + 10;
-        this.speedX = isExplosion ? (Math.random() - 0.5) * 12 : Math.random() * 2 - 1;
-        this.speedY = isExplosion ? (Math.random() - 0.5) * 12 : Math.random() * 2 + 1.5;
+        this.size = Math.random() * 18 + 10;
+        this.speedX = isExplosion ? (Math.random() - 0.5) * 14 : Math.random() * 2 - 1;
+        this.speedY = isExplosion ? (Math.random() - 0.5) * 14 : Math.random() * 2.5 + 1.5;
         this.opacity = 1;
         this.decay = isExplosion ? Math.random() * 0.02 + 0.01 : 0.005;
-        this.color = ['#f43f5e', '#facc15', '#fb7185', '#eab308'][Math.floor(Math.random() * 4)];
+        this.color = ['#f43f5e', '#facc15', '#fb7185', '#eab308', '#ec4899'][Math.floor(Math.random() * 5)];
       }
 
       update() {
@@ -428,6 +501,8 @@
         ctx.translate(this.x, this.y);
         ctx.globalAlpha = Math.max(0, this.opacity);
         ctx.fillStyle = this.color;
+        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+        ctx.shadowBlur = 6;
         ctx.beginPath();
         const topCurveHeight = this.size * 0.3;
         ctx.moveTo(0, topCurveHeight);
@@ -440,45 +515,60 @@
       }
     }
 
+    /* --- FUEGOS ARTIFICIALES REALISTAS CON COLA Y CHISPAS --- */
+    class FireworkParticle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 8 + 2;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.02 + 0.015;
+        this.color = color;
+        this.gravity = 0.12;
+      }
+
+      update() {
+        this.vx *= 0.96;
+        this.vy *= 0.96;
+        this.vy += this.gravity;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
     class Firework {
       constructor(x, y) {
         this.x = x;
         this.y = y;
         this.particles = [];
-        const count = 40;
-        for (let i = 0; i < count; i++) {
-          const angle = (Math.PI * 2 / count) * i;
-          const speed = Math.random() * 6 + 3;
-          this.particles.push({
-            x: this.x,
-            y: this.y,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
-            alpha: 1,
-            color: ['#facc15', '#f43f5e', '#38bdf8', '#4ade80'][Math.floor(Math.random() * 4)]
-          });
+        const color = ['#facc15', '#f43f5e', '#38bdf8', '#4ade80', '#e0e7ff'][Math.floor(Math.random() * 5)];
+        for (let i = 0; i < 60; i++) {
+          this.particles.push(new FireworkParticle(this.x, this.y, color));
         }
       }
 
       update() {
-        this.particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vy += 0.08; // Gravedad
-          p.alpha -= 0.02;
-        });
+        this.particles.forEach(p => p.update());
       }
 
       draw(ctx) {
-        this.particles.forEach(p => {
-          ctx.save();
-          ctx.globalAlpha = Math.max(0, p.alpha);
-          ctx.fillStyle = p.color;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        });
+        this.particles.forEach(p => p.draw(ctx));
       }
     }
 
@@ -500,7 +590,9 @@
       draw(ctx) {
         ctx.save();
         ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = '#ca8a04';
+        ctx.fillStyle = '#facc15';
+        ctx.shadowColor = '#facc15';
+        ctx.shadowBlur = 8;
         ctx.beginPath();
         ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
         ctx.fill();
@@ -508,7 +600,7 @@
       }
     }
 
-    /* --- ANIMACIÓN CONTINUA --- */
+    /* --- BUCLE DE ANIMACIÓN --- */
     function animate(timestamp) {
       time = timestamp || 0;
       gardenCtx.clearRect(0, 0, gardenCanvas.width, gardenCanvas.height);
@@ -537,16 +629,17 @@
     }
     animate();
 
-    /* --- SECUENCIA Y NARRATIVA DEL EVENTO --- */
+    /* --- INTERACCIONES CONTROLADAS MANUALMENTE POR EL USUARIO --- */
 
-    function createFlowerGarden() {
+    function spawnGarden() {
+      flowers = [];
       const total = Math.floor(window.innerWidth / 70);
       for (let i = 0; i < total; i++) {
         setTimeout(() => {
           const x = (gardenCanvas.width / total) * i + (Math.random() * 30 - 15);
-          const y = gardenCanvas.height - (Math.random() * 220 + 130);
-          flowers.push(new Flower(x, y, Math.random() * 0.6 + 0.6));
-        }, i * 150);
+          const y = gardenCanvas.height - (Math.random() * 240 + 130);
+          flowers.push(new Flower(x, y, Math.random() * 0.6 + 0.65));
+        }, i * 160);
       }
     }
 
@@ -556,106 +649,89 @@
       }
     }
 
-    // PASO 1: ABRIR SOBRE -> CARTA + FLORES + EXPLOSIÓN DE CORAZONES
+    // PASO 1: ABRIR REGALO -> LA CARTA QUEDA PERMANENTE + NACEN FLORES + CORAZONES
     document.getElementById('start-btn').addEventListener('click', () => {
       document.getElementById('intro-overlay').classList.add('hidden');
       
-      // Música
       bgMusic.play().then(() => { isPlayingMusic = true; }).catch(e => console.log(e));
 
-      // Aparece la Carta
-      setTimeout(() => {
-        document.getElementById('letter').classList.add('visible');
-        createFlowerGarden();
-        createHeartExplosion();
-      }, 500);
+      spawnGarden();
+      createHeartExplosion();
     });
 
-    // PASO 2: BOTÓN CONTINUAR A LAS FOTOS
-    document.getElementById('continue-btn').addEventListener('click', () => {
-      document.getElementById('letter').style.display = 'none';
-      startPhotoSequence();
-    });
+    // BOTÓN: SIGUIENTE FOTO (CONTROL MANUAL)
+    document.getElementById('next-photo-btn').addEventListener('click', () => {
+      // Ocultar foto actual
+      document.getElementById(`card-${currentPhotoIndex}`).classList.remove('active');
 
-    // SECUENCIA DE FOTOS CON EFECTOS
-    function startPhotoSequence() {
-      // FOTO 1: Explosión y Fuegos Artificiales
-      const card0 = document.getElementById('card-0');
-      card0.classList.add('active');
-      fireworks.push(new Firework(fxCanvas.width * 0.3, fxCanvas.height * 0.3));
-      fireworks.push(new Firework(fxCanvas.width * 0.7, fxCanvas.height * 0.3));
+      // Avanzar índice
+      currentPhotoIndex = (currentPhotoIndex + 1) % totalPhotos;
 
-      // FOTO 2: Lluvia de Corazones de varios tamaños
-      setTimeout(() => {
-        card0.classList.remove('active');
-        const card1 = document.getElementById('card-1');
-        card1.classList.add('active');
+      // Mostrar siguiente foto
+      const nextCard = document.getElementById(`card-${currentPhotoIndex}`);
+      nextCard.classList.add('active');
 
-        for (let i = 0; i < 40; i++) {
-          setTimeout(() => {
-            particles.push(new HeartParticle(Math.random() * fxCanvas.width, -20, false));
-          }, i * 80);
+      // Efectos según la foto seleccionada
+      if (currentPhotoIndex === 0) {
+        fireworks.push(new Firework(fxCanvas.width * 0.3, fxCanvas.height * 0.3));
+        fireworks.push(new Firework(fxCanvas.width * 0.7, fxCanvas.height * 0.3));
+      } else if (currentPhotoIndex === 1) {
+        for (let i = 0; i < 35; i++) {
+          particles.push(new HeartParticle(Math.random() * fxCanvas.width, -20, false));
         }
-      }, 4000);
-
-      // FOTO 3: Destellos
-      setTimeout(() => {
-        document.getElementById('card-1').classList.remove('active');
-        const card2 = document.getElementById('card-2');
-        card2.classList.add('active');
+      } else if (currentPhotoIndex === 2) {
         fireworks.push(new Firework(fxCanvas.width / 2, fxCanvas.height * 0.25));
-      }, 8000);
+      } else if (currentPhotoIndex === 3) {
+        createHeartExplosion();
+      }
+    });
 
-      // FOTO 4: Mas Corazones
+    // BOTÓN: DISPARAR FUEGOS ARTIFICIALES
+    document.getElementById('fireworks-btn').addEventListener('click', () => {
+      fireworks.push(new Firework(Math.random() * (fxCanvas.width * 0.8) + fxCanvas.width * 0.1, Math.random() * (fxCanvas.height * 0.4) + 100));
+      fireworks.push(new Firework(Math.random() * (fxCanvas.width * 0.8) + fxCanvas.width * 0.1, Math.random() * (fxCanvas.height * 0.4) + 100));
+    });
+
+    // BOTÓN: LLUVIA DE CORAZONES
+    document.getElementById('hearts-btn').addEventListener('click', () => {
+      for (let i = 0; i < 40; i++) {
+        particles.push(new HeartParticle(Math.random() * fxCanvas.width, -20, false));
+      }
+    });
+
+    // BOTÓN: REFLORECER JARDÍN (SEMILLAS + NUEVAS FLORES)
+    document.getElementById('rebloom-btn').addEventListener('click', () => {
+      flowers.forEach(f => {
+        seeds.push(new Seed(f.x, f.targetY));
+      });
+
       setTimeout(() => {
-        document.getElementById('card-2').classList.remove('active');
-        const card3 = document.getElementById('card-3');
-        card3.classList.add('active');
+        spawnGarden();
+      }, 1000);
+    });
 
-        for (let i = 0; i < 30; i++) {
-          particles.push(new HeartParticle(fxCanvas.width / 2 + (Math.random() - 0.5) * 300, fxCanvas.height / 2, true));
-        }
-      }, 12000);
+    // BOTÓN: UNIR FOTOS (MODO COLLAGE FINAL)
+    document.getElementById('collage-btn').addEventListener('click', () => {
+      const offsets = [
+        { x: -170, y: -80, r: -8 },
+        { x: 170, y: -80, r: 8 },
+        { x: -170, y: 110, r: 6 },
+        { x: 170, y: 110, r: -6 }
+      ];
 
-      // GRAN CIERRE: TODAS LAS FOTOS SE JUNTAN, DEJAN SEMILLAS, VUELVEN A FLORECER Y FUEGOS ARTIFICIALES
-      setTimeout(() => {
-        document.getElementById('card-3').classList.remove('active');
+      for (let i = 0; i < totalPhotos; i++) {
+        const card = document.getElementById(`card-${i}`);
+        card.classList.add('collage-mode');
+        card.style.transform = `translate(${offsets[i].x}px, ${offsets[i].y}px) rotate(${offsets[i].r}deg) scale(0.8)`;
+      }
 
-        // Unir las 4 fotos en estilo collage
-        const offsets = [
-          { x: -180, y: -100, r: -8 },
-          { x: 180, y: -100, r: 8 },
-          { x: -180, y: 100, r: 6 },
-          { x: 180, y: 100, r: -6 }
-        ];
-
-        for (let i = 0; i < 4; i++) {
-          const card = document.getElementById(`card-${i}`);
-          card.classList.add('collage-mode');
-          card.style.transform = `translate(${offsets[i].x}px, ${offsets[i].y}px) rotate(${offsets[i].r}deg) scale(0.85)`;
-        }
-
-        // Caída de semillas
-        flowers.forEach(f => {
-          seeds.push(new Seed(f.x, f.targetY));
-        });
-
-        // Reiniciar flores y re-florecer
+      // Espectáculo final de fuegos artificiales
+      for (let i = 0; i < 6; i++) {
         setTimeout(() => {
-          flowers = [];
-          createFlowerGarden();
-
-          // Gran espectáculo de Fuegos Artificiales
-          let fwCount = 0;
-          const fwInterval = setInterval(() => {
-            fireworks.push(new Firework(Math.random() * fxCanvas.width, Math.random() * (fxCanvas.height * 0.5)));
-            fwCount++;
-            if (fwCount > 12) clearInterval(fwInterval);
-          }, 350);
-        }, 1500);
-
-      }, 16000);
-    }
+          fireworks.push(new Firework(Math.random() * fxCanvas.width, Math.random() * (fxCanvas.height * 0.5)));
+        }, i * 300);
+      }
+    });
 
     // BOTÓN MÚSICA
     document.getElementById('music-btn').addEventListener('click', () => {
