@@ -14,18 +14,18 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      overflow-x: hidden;
+      overflow: hidden;
       background: radial-gradient(circle at bottom, #2d121d 0%, #111827 70%, #030712 100%);
       color: #fff;
       min-height: 100vh;
       user-select: none;
     }
 
-    /* PANTALLA DE BIENVENIDA / SOBRE DE AMOR */
+    /* PANTALLA DE BIENVENIDA / SOBRE */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(17, 24, 39, 0.92);
+      background: rgba(17, 24, 39, 0.94);
       backdrop-filter: blur(14px);
       display: flex;
       justify-content: center;
@@ -73,7 +73,6 @@
       margin-bottom: 2rem;
     }
 
-    /* BOTONES */
     .btn-main {
       background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
       color: white;
@@ -85,88 +84,82 @@
       cursor: pointer;
       box-shadow: 0 10px 25px rgba(234, 179, 8, 0.4);
       transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
     }
 
     .btn-main:hover {
       transform: translateY(-3px) scale(1.04);
       box-shadow: 0 15px 35px rgba(234, 179, 8, 0.6);
-      background: linear-gradient(135deg, #facc15 0%, #d97706 100%);
     }
 
-    /* CANVAS 1: JARDÍN Y FLORES (z-index: 5, sobre el fondo y tarjetas semitransparentes) */
-    #garden-canvas {
+    /* CANVAS DE FONDO Y EFECTOS */
+    #garden-canvas, #fx-canvas {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 5;
       pointer-events: none;
     }
+    #garden-canvas { z-index: 5; }
+    #fx-canvas { z-index: 500; }
 
-    /* CANVAS 2: LLUVIA Y EFECTOS SOBRE TODO (z-index: 500) */
-    #rain-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 500;
-      pointer-events: none;
-    }
-
-    /* CONTENEDOR PRINCIPAL DE INTERFAZ */
+    /* CONTENEDOR PRINCIPAL Y CARTA */
     .main-layout {
       position: relative;
       z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1.5rem 1rem 5rem 1rem;
+      justify-content: center;
+      padding: 2rem 1rem;
       min-height: 100vh;
       pointer-events: none;
     }
 
-    /* TARJETA DE MENSAJE */
-    .message-container {
-      background: rgba(17, 24, 39, 0.65);
+    .letter-card {
+      background: rgba(17, 24, 39, 0.75);
       backdrop-filter: blur(12px);
-      padding: 2rem 2.5rem;
+      padding: 2.5rem 3rem;
       border-radius: 24px;
       text-align: center;
       max-width: 650px;
-      width: 100%;
+      width: 90%;
       pointer-events: auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(234, 179, 8, 0.2);
-      border: 1px solid rgba(254, 240, 138, 0.3);
-      margin-bottom: 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(234, 179, 8, 0.3);
+      border: 1px solid rgba(254, 240, 138, 0.4);
+      opacity: 0;
+      transform: translateY(30px) scale(0.9);
+      transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .message-container h1 {
+    .letter-card.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .letter-card h1 {
       font-family: 'Dancing Script', cursive;
       color: #facc15;
       font-size: 3.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
       text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);
     }
 
-    .message-container p {
+    .letter-card p {
       color: #f3f4f6;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      margin-bottom: 1.2rem;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
       font-weight: 300;
     }
 
-    /* POLAROID / CARRUSEL DE FOTOS DE PAREJA */
-    .photo-section {
+    /* POLAROID Y GALERÍA DE FOTOS DE PAREJA */
+    .photo-stage {
+      position: relative;
+      margin-top: 1.5rem;
       pointer-events: auto;
-      margin: 1rem 0 2rem 0;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
     }
 
@@ -176,15 +169,22 @@
       border-radius: 6px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(250, 204, 21, 0.2);
       transform: rotate(-2deg);
-      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       max-width: 320px;
-      position: relative;
-      cursor: pointer;
+      opacity: 0;
+      display: none;
     }
 
-    .polaroid-card:hover {
-      transform: rotate(0deg) scale(1.05);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(250, 204, 21, 0.4);
+    .polaroid-card.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .polaroid-card.collage-mode {
+      position: absolute;
+      display: block !important;
+      opacity: 1 !important;
+      transition: all 1.2s ease-in-out;
     }
 
     .polaroid-img-container {
@@ -193,14 +193,12 @@
       overflow: hidden;
       border-radius: 4px;
       background: #111;
-      position: relative;
     }
 
     .polaroid-img-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: opacity 0.8s ease;
     }
 
     .polaroid-caption {
@@ -215,111 +213,20 @@
       font-weight: 700;
     }
 
-    /* CONTROLES Y BOTONES DE ACCIÓN */
-    .action-bar {
-      pointer-events: auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 1rem;
-    }
-
-    .btn-secondary {
+    /* BOTÓN DE MÚSICA REUTILIZABLE */
+    .music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1100;
       background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 0.75rem 1.4rem;
+      padding: 0.6rem 1.2rem;
       border-radius: 30px;
-      font-size: 0.95rem;
-      font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(250, 204, 21, 0.25);
-      border-color: #facc15;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    }
-
-    #edit-btn {
-      background: rgba(250, 204, 21, 0.1);
-      color: #fef08a;
-      border: 1px dashed rgba(250, 204, 21, 0.5);
-      font-size: 0.85rem;
-      padding: 0.4rem 1.2rem;
-      border-radius: 20px;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: all 0.3s;
-    }
-
-    #edit-btn:hover {
-      background: rgba(250, 204, 21, 0.25);
-    }
-
-    /* MODAL DE EDICIÓN DE TEXTO */
-    .modal-hidden {
-      display: none !important;
-    }
-
-    #modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(10px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      pointer-events: auto;
-    }
-
-    .modal-card {
-      background: #1e293b;
-      border: 1px solid rgba(250, 204, 21, 0.4);
-      padding: 2.2rem;
-      border-radius: 24px;
-      width: 90%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-    }
-
-    .modal-card h2 {
-      color: #facc15;
-      font-family: 'Dancing Script', cursive;
-      font-size: 2.2rem;
-    }
-
-    .modal-card input, .modal-card textarea {
-      width: 100%;
-      padding: 0.9rem;
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      color: #fff;
-      font-family: inherit;
-      font-size: 0.95rem;
-    }
-
-    .modal-card input:focus, .modal-card textarea:focus {
-      outline: none;
-      border-color: #facc15;
-    }
-
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
+      font-size: 0.9rem;
     }
 
     @keyframes pulseFloat {
@@ -330,10 +237,12 @@
 </head>
 <body>
 
-  <!-- REPRODUCTOR DE AUDIO PROPIO -->
+  <!-- AUDIO -->
   <audio id="bg-music" loop preload="auto">
     <source src="./Ed Sheeran - photograph sub español.mp3" type="audio/mpeg">
   </audio>
+
+  <button id="music-btn" class="music-toggle">🎵 Música On</button>
 
   <!-- PANTALLA DE BIENVENIDA -->
   <div id="intro-overlay" class="overlay">
@@ -345,120 +254,94 @@
     </div>
   </div>
 
-  <!-- CANVAS DEDICADO A FLORES Y MARIPOSAS -->
+  <!-- CANVAS -->
   <canvas id="garden-canvas"></canvas>
-
-  <!-- CANVAS DEDICADO A LLUVIA DE PÉTALOS, CORAZONES Y DESTELLOS SOBRE TODO -->
-  <canvas id="rain-canvas"></canvas>
+  <canvas id="fx-canvas"></canvas>
 
   <div class="main-layout">
-    <!-- CARTA DE AMOR DE PRIMAVERA -->
-    <div class="message-container">
-      <h1 id="title-text">Feliz Día de la Primavera 💛</h1>
-      <p id="message-text">Como las flores amarillas que buscan la luz del sol, mi corazón siempre florece a tu lado. Gracias por llenar mi vida de alegría, amor y colores infinitos.</p>
-      <button id="edit-btn">✏️ Personalizar Dedicatoria</button>
+    <!-- CARTA INICIAL -->
+    <div id="letter" class="letter-card">
+      <h1>Feliz Día de la Primavera 💛</h1>
+      <p>Como las flores amarillas que buscan la luz del sol, mi corazón siempre florece a tu lado. Gracias por llenar mi vida de alegría, amor y momentos inolvidables.</p>
+      <button id="continue-btn" class="btn-main">Nuestros Recuerdos 📸</button>
     </div>
 
-    <!-- POLAROID DE RECUERDOS (FOTOS DE PAREJA) -->
-    <div class="photo-section">
-      <div class="polaroid-card" id="polaroid-box" title="Haz clic para ver la siguiente foto">
+    <!-- ETAPA DE FOTOS DE PAREJA -->
+    <div id="photo-stage" class="photo-stage">
+      <div class="polaroid-card" id="card-0">
         <div class="polaroid-img-container">
-          <img id="current-photo" src="./foto1.jpg" alt="Nuestro Recuerdo" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
+          <img src="./foto1.jpg" alt="Foto 1" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
         </div>
-        <div class="polaroid-caption" id="photo-caption">Tú y Yo 💛</div>
+        <div class="polaroid-caption">Momento Especial 💛</div>
       </div>
-    </div>
 
-    <!-- BOTONES INTERACTIVOS -->
-    <div class="action-bar">
-      <button id="music-btn" class="btn-secondary">🎵 </button>
-      <button id="petals-btn" class="btn-secondary">🌻 Toca Aquí Miau</button>
-      <button id="hearts-btn" class="btn-secondary">💖 Lluvia de Corazones</button>
-      <button id="next-photo-btn" class="btn-secondary">📸 Nosotros</button>
-      <button id="clear-btn" class="btn-secondary">🔄 Crecer</button>
-    </div>
-  </div>
+      <div class="polaroid-card" id="card-1">
+        <div class="polaroid-img-container">
+          <img src="./foto2.jpg" alt="Foto 2" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
+        </div>
+        <div class="polaroid-caption">Juntos Siempre ✨</div>
+      </div>
 
-  <!-- MODAL PARA EDITAR DEDICATORIA -->
-  <div id="modal-overlay" class="modal-hidden">
-    <div class="modal-card">
-      <h2>Edita tu Dedicatoria</h2>
-      <input type="text" id="input-title" placeholder="Título (Ej: Mi vida entera, Feliz Día 🌻)">
-      <textarea id="input-message" rows="4" placeholder="Escribe tu mensaje romántico aquí..."></textarea>
-      <div class="modal-actions">
-        <button id="save-btn" class="btn-main" style="padding: 0.6rem 1.5rem; font-size: 0.95rem;">Guardar</button>
-        <button id="cancel-btn" class="btn-secondary" style="padding: 0.6rem 1.5rem;">Cancelar</button>
+      <div class="polaroid-card" id="card-2">
+        <div class="polaroid-img-container">
+          <img src="./foto3.jpg" alt="Foto 3" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
+        </div>
+        <div class="polaroid-caption">Mi Lugar Favorito 🥰</div>
+      </div>
+
+      <div class="polaroid-card" id="card-3">
+        <div class="polaroid-img-container">
+          <img src="./foto4.jpg" alt="Foto 4" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
+        </div>
+        <div class="polaroid-caption">Amor Infinito 🌸</div>
       </div>
     </div>
   </div>
 
   <script>
-    /* --- CONFIGURACIÓN DE CANVAS Y AUDIO --- */
     const gardenCanvas = document.getElementById('garden-canvas');
     const gardenCtx = gardenCanvas.getContext('2d');
-
-    const rainCanvas = document.getElementById('rain-canvas');
-    const rainCtx = rainCanvas.getContext('2d');
-
+    const fxCanvas = document.getElementById('fx-canvas');
+    const fxCtx = fxCanvas.getContext('2d');
     const bgMusic = document.getElementById('bg-music');
 
     let flowers = [];
-    let petals = [];
-    let hearts = [];
-    let butterflies = [];
-    let sparkles = [];
-    let isPlayingMusic = false;
+    let particles = [];
+    let fireworks = [];
+    let seeds = [];
     let time = 0;
-
-    /* --- CARRUSEL DE FOTOS DE PAREJA --- */
-    const photos = [
-      { url: './foto1.jpg', caption: 'Mi Lugar Favorito 💛' },
-      { url: './foto2.jpg', caption: 'Juntos Siempre ✨' },
-      { url: './foto3.jpg', caption: 'Momento Especial 🥰' },
-      { url: './foto4.jpg', caption: 'Amor Infinito 🌸' }
-    ];
-    let photoIndex = 0;
+    let isPlayingMusic = false;
 
     function resizeCanvas() {
-      gardenCanvas.width = window.innerWidth;
-      gardenCanvas.height = window.innerHeight;
-      rainCanvas.width = window.innerWidth;
-      rainCanvas.height = window.innerHeight;
+      gardenCanvas.width = fxCanvas.width = window.innerWidth;
+      gardenCanvas.height = fxCanvas.height = window.innerHeight;
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    /* --- CLASE FLOR MEJORADA (CRECIMIENTO PROGRESIVO Y DIFERENTES TAMAÑOS) --- */
+    /* --- CLASE FLOR AMARILLA --- */
     class Flower {
       constructor(x, y, scale = 1) {
         this.x = x;
         this.y = window.innerHeight;
         this.targetY = y;
-        this.scale = scale; // Factor de tamaño variado (pequeñas, medianas, grandes)
+        this.scale = scale;
         this.stemHeight = 0;
         this.maxStemHeight = (window.innerHeight - y);
         this.petalProgress = 0;
         this.type = Math.random();
 
         if (this.type < 0.5) {
-          // GIRASOL AMARILLO
           this.petalCount = 14;
           this.maxPetalSize = (Math.random() * 20 + 30) * this.scale;
           this.palette = { inner: '#eab308', outer: '#fef08a', center1: '#451a03', center2: '#78350f' };
-        } else if (this.type < 0.8) {
-          // ROSA AMARILLA / DORADA
+        } else {
           this.petalCount = 10;
           this.maxPetalSize = (Math.random() * 18 + 26) * this.scale;
           this.palette = { inner: '#f59e0b', outer: '#fef08a', center1: '#ca8a04', center2: '#eab308' };
-        } else {
-          // MARGARITA PRIMAVERAL
-          this.petalCount = 12;
-          this.maxPetalSize = (Math.random() * 15 + 22) * this.scale;
-          this.palette = { inner: '#ffffff', outer: '#fef9c3', center1: '#eab308', center2: '#ca8a04' };
         }
 
-        // Crecimiento pausado y suave poco a poco
-        this.growthSpeed = (Math.random() * 1.5 + 1.2);
+        this.growthSpeed = Math.random() * 2 + 1.5;
         this.swayOffset = Math.random() * 100;
       }
 
@@ -466,7 +349,7 @@
         if (this.stemHeight < this.maxStemHeight) {
           this.stemHeight += this.growthSpeed;
         } else if (this.petalProgress < 1) {
-          this.petalProgress += 0.012; // Despliegue de pétalos progresivo y sutil
+          this.petalProgress += 0.015;
         }
       }
 
@@ -475,7 +358,6 @@
         const flowerHeadX = this.x + sway;
         const currentY = window.innerHeight - this.stemHeight;
 
-        // Tallo con Curvatura Orgánica
         const stemGrad = ctx.createLinearGradient(this.x, window.innerHeight, flowerHeadX, currentY);
         stemGrad.addColorStop(0, '#15803d');
         stemGrad.addColorStop(1, '#4ade80');
@@ -487,26 +369,11 @@
         ctx.lineWidth = Math.max(3, 6 * this.scale);
         ctx.stroke();
 
-        // Hojas
-        if (this.stemHeight > this.maxStemHeight * 0.4) {
-          ctx.save();
-          ctx.translate(this.x + sway * 0.3, window.innerHeight - this.stemHeight * 0.4);
-          ctx.rotate(0.35);
-          ctx.beginPath();
-          ctx.ellipse(0, 0, 20 * this.scale, 8 * this.scale, 0, 0, Math.PI * 2);
-          ctx.fillStyle = '#22c55e';
-          ctx.fill();
-          ctx.restore();
-        }
-
-        // Flor
         if (this.petalProgress > 0) {
           ctx.save();
           ctx.translate(flowerHeadX, currentY);
-          
           const currentPetalSize = this.maxPetalSize * this.petalProgress;
 
-          // Pétalos
           for (let i = 0; i < this.petalCount; i++) {
             const angle = (Math.PI * 2 / this.petalCount) * i;
             ctx.save();
@@ -519,14 +386,11 @@
             ctx.beginPath();
             ctx.ellipse(0, currentPetalSize * 0.7, currentPetalSize * 0.32, currentPetalSize * 0.75, 0, 0, Math.PI * 2);
             ctx.fillStyle = petalGrad;
-            ctx.shadowColor = 'rgba(0,0,0,0.25)';
-            ctx.shadowBlur = 6;
             ctx.fill();
             ctx.restore();
           }
 
-          // Centro de Polén
-          const centerRadius = currentPetalSize * (this.type < 0.5 ? 0.45 : 0.32);
+          const centerRadius = currentPetalSize * 0.38;
           const centerGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, centerRadius);
           centerGrad.addColorStop(0, this.palette.center1);
           centerGrad.addColorStop(1, this.palette.center2);
@@ -535,124 +399,35 @@
           ctx.arc(0, 0, centerRadius, 0, Math.PI * 2);
           ctx.fillStyle = centerGrad;
           ctx.fill();
-
           ctx.restore();
         }
       }
     }
 
-    /* --- CLASE MARIPOSA DORADA --- */
-    class Butterfly {
-      constructor() {
-        this.x = Math.random() * gardenCanvas.width;
-        this.y = Math.random() * (gardenCanvas.height * 0.6);
-        this.size = Math.random() * 6 + 11;
-        this.vx = (Math.random() - 0.5) * 1.6;
-        this.vy = (Math.random() - 0.5) * 1.6;
-        this.wingAngle = 0;
-        this.wingSpeed = Math.random() * 0.15 + 0.12;
-        this.color = ['#facc15', '#f59e0b', '#fbbf24', '#f472b6'][Math.floor(Math.random() * 4)];
+    /* --- EFECTOS DE CORAZONES Y FUEGOS ARTIFICIALES --- */
+    class HeartParticle {
+      constructor(x, y, isExplosion = false) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 16 + 10;
+        this.speedX = isExplosion ? (Math.random() - 0.5) * 12 : Math.random() * 2 - 1;
+        this.speedY = isExplosion ? (Math.random() - 0.5) * 12 : Math.random() * 2 + 1.5;
+        this.opacity = 1;
+        this.decay = isExplosion ? Math.random() * 0.02 + 0.01 : 0.005;
+        this.color = ['#f43f5e', '#facc15', '#fb7185', '#eab308'][Math.floor(Math.random() * 4)];
       }
 
       update() {
-        this.x += this.vx + Math.sin(time * 0.003);
-        this.y += this.vy + Math.cos(time * 0.003);
-        this.wingAngle += this.wingSpeed;
-
-        if (this.x < -20) this.x = gardenCanvas.width + 20;
-        if (this.x > gardenCanvas.width + 20) this.x = -20;
-        if (this.y < -20) this.y = gardenCanvas.height * 0.7;
-        if (this.y > gardenCanvas.height * 0.7) this.y = 50;
-      }
-
-      draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        const wingScale = Math.abs(Math.sin(this.wingAngle));
-
-        // Ala izquierda
-        ctx.save();
-        ctx.scale(wingScale, 1);
-        ctx.beginPath();
-        ctx.ellipse(-this.size * 0.8, -this.size * 0.5, this.size * 0.95, this.size * 0.65, Math.PI / 4, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.restore();
-
-        // Ala derecha
-        ctx.save();
-        ctx.scale(wingScale, 1);
-        ctx.beginPath();
-        ctx.ellipse(this.size * 0.8, -this.size * 0.5, this.size * 0.95, this.size * 0.65, -Math.PI / 4, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.restore();
-
-        // Cuerpo
-        ctx.beginPath();
-        ctx.ellipse(0, 0, 2, this.size * 0.8, 0, 0, Math.PI * 2);
-        ctx.fillStyle = '#1e293b';
-        ctx.fill();
-
-        ctx.restore();
-      }
-    }
-
-    /* --- CLASE PÉTALOS Y CORAZONES LLUVIA --- */
-    class Petal {
-      constructor() {
-        this.x = Math.random() * rainCanvas.width;
-        this.y = -20;
-        this.size = Math.random() * 9 + 8;
-        this.speedY = Math.random() * 1.8 + 1.2;
-        this.speedX = Math.random() * 1.6 - 0.8;
-        this.rotation = Math.random() * 360;
-        this.rotSpeed = Math.random() * 0.04 - 0.02;
-        this.color = ['rgba(250, 204, 21, 0.95)', 'rgba(245, 158, 11, 0.95)', 'rgba(254, 240, 138, 0.95)'][Math.floor(Math.random() * 3)];
-      }
-
-      update() {
+        this.x += this.speedX;
         this.y += this.speedY;
-        this.x += this.speedX + Math.sin(time * 0.002);
-        this.rotation += this.rotSpeed;
+        this.opacity -= this.decay;
       }
 
       draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-        ctx.beginPath();
-        ctx.ellipse(0, 0, this.size, this.size * 0.55, 0, 0, Math.PI * 2);
+        ctx.globalAlpha = Math.max(0, this.opacity);
         ctx.fillStyle = this.color;
-        ctx.shadowColor = 'rgba(0,0,0,0.3)';
-        ctx.shadowBlur = 4;
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    class Heart {
-      constructor() {
-        this.x = Math.random() * rainCanvas.width;
-        this.y = -20;
-        this.size = Math.random() * 14 + 11;
-        this.speedY = Math.random() * 2 + 1.2;
-        this.speedX = Math.random() * 1.4 - 0.7;
-        this.opacity = Math.random() * 0.4 + 0.6;
-      }
-
-      update() {
-        this.y += this.speedY;
-        this.x += this.speedX + Math.sin(time * 0.003);
-      }
-
-      draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = '#f43f5e';
-        ctx.shadowColor = 'rgba(244, 63, 94, 0.5)';
-        ctx.shadowBlur = 8;
         ctx.beginPath();
         const topCurveHeight = this.size * 0.3;
         ctx.moveTo(0, topCurveHeight);
@@ -665,120 +440,224 @@
       }
     }
 
-    class Sparkle {
+    class Firework {
       constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = Math.random() * 5 + 2;
-        this.alpha = 1;
-        this.decay = Math.random() * 0.025 + 0.015;
+        this.particles = [];
+        const count = 40;
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 / count) * i;
+          const speed = Math.random() * 6 + 3;
+          this.particles.push({
+            x: this.x,
+            y: this.y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+            color: ['#facc15', '#f43f5e', '#38bdf8', '#4ade80'][Math.floor(Math.random() * 4)]
+          });
+        }
       }
 
       update() {
-        this.alpha -= this.decay;
+        this.particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.08; // Gravedad
+          p.alpha -= 0.02;
+        });
+      }
+
+      draw(ctx) {
+        this.particles.forEach(p => {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+      }
+    }
+
+    class Seed {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.targetY = fxCanvas.height - 10;
+        this.speedY = Math.random() * 2 + 1;
+        this.alpha = 1;
+      }
+
+      update() {
+        if (this.y < this.targetY) {
+          this.y += this.speedY;
+        }
       }
 
       draw(ctx) {
         ctx.save();
-        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = '#ca8a04';
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = '#fef08a';
-        ctx.shadowColor = '#facc15';
-        ctx.shadowBlur = 12;
+        ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
     }
 
-    /* --- BUCLE DE ANIMACIÓN DOS CANVASES --- */
+    /* --- ANIMACIÓN CONTINUA --- */
     function animate(timestamp) {
       time = timestamp || 0;
-      
-      // Limpiar ambos canvas
       gardenCtx.clearRect(0, 0, gardenCanvas.width, gardenCanvas.height);
-      rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+      fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
 
-      // Dibujar Jardín y Flores
       flowers.forEach(f => { f.update(); f.draw(gardenCtx); });
-      butterflies.forEach(b => { b.update(); b.draw(gardenCtx); });
 
-      // Dibujar Lluvia sobre todo
-      petals.forEach((p, idx) => {
+      particles.forEach((p, idx) => {
         p.update();
-        p.draw(rainCtx);
-        if (p.y > rainCanvas.height + 20) petals.splice(idx, 1);
+        p.draw(fxCtx);
+        if (p.opacity <= 0) particles.splice(idx, 1);
       });
 
-      hearts.forEach((h, idx) => {
-        h.update();
-        h.draw(rainCtx);
-        if (h.y > rainCanvas.height + 20) hearts.splice(idx, 1);
+      fireworks.forEach((fw, idx) => {
+        fw.update();
+        fw.draw(fxCtx);
+        if (fw.particles[0].alpha <= 0) fireworks.splice(idx, 1);
       });
 
-      sparkles.forEach((s, idx) => {
+      seeds.forEach(s => {
         s.update();
-        s.draw(rainCtx);
-        if (s.alpha <= 0) sparkles.splice(idx, 1);
+        s.draw(fxCtx);
       });
 
       requestAnimationFrame(animate);
     }
     animate();
 
-    /* --- GENERACIÓN PROGRESIVA Y VARIADA DE FLORES --- */
-    function spawnGarden() {
-      flowers = [];
-      const totalFlowers = Math.floor(window.innerWidth / 70); // Mayor cantidad de flores
-      
-      // Crecimiento paulatino con un desfase de tiempo para cada flor
-      for (let i = 0; i < totalFlowers; i++) {
-        setTimeout(() => {
-          const x = (gardenCanvas.width / totalFlowers) * i + (Math.random() * 40 - 20);
-          
-          // Posición Y variada para distintos niveles de altura
-          const y = gardenCanvas.height - (Math.random() * 260 + 120);
-          
-          // Factor de escala variado para alternar flores pequeñas, medianas y grandes
-          const scale = Math.random() * 0.7 + 0.6; 
-          
-          flowers.push(new Flower(x, y, scale));
-        }, i * 180); // Aparecen secuencialmente poco a poco
-      }
+    /* --- SECUENCIA Y NARRATIVA DEL EVENTO --- */
 
-      butterflies = [];
-      for (let i = 0; i < 7; i++) {
-        butterflies.push(new Butterfly());
+    function createFlowerGarden() {
+      const total = Math.floor(window.innerWidth / 70);
+      for (let i = 0; i < total; i++) {
+        setTimeout(() => {
+          const x = (gardenCanvas.width / total) * i + (Math.random() * 30 - 15);
+          const y = gardenCanvas.height - (Math.random() * 220 + 130);
+          flowers.push(new Flower(x, y, Math.random() * 0.6 + 0.6));
+        }, i * 150);
       }
     }
 
-    // Dibujar flor al hacer clic en cualquier lugar
-    document.addEventListener('click', (e) => {
-      // Si el clic no fue en un botón ni modal, nacen destellos y flores
-      if (!e.target.closest('button') && !e.target.closest('.modal-card') && !e.target.closest('.welcome-card')) {
-        const scale = Math.random() * 0.6 + 0.7;
-        flowers.push(new Flower(e.clientX, e.clientY, scale));
-        
-        for (let i = 0; i < 12; i++) {
-          sparkles.push(new Sparkle(e.clientX + (Math.random() - 0.5) * 60, e.clientY + (Math.random() - 0.5) * 60));
-        }
+    function createHeartExplosion() {
+      for (let i = 0; i < 50; i++) {
+        particles.push(new HeartParticle(fxCanvas.width / 2, fxCanvas.height / 2, true));
       }
-    });
+    }
 
-    // Abrir sorpresa y reproducir música
+    // PASO 1: ABRIR SOBRE -> CARTA + FLORES + EXPLOSIÓN DE CORAZONES
     document.getElementById('start-btn').addEventListener('click', () => {
       document.getElementById('intro-overlay').classList.add('hidden');
-      spawnGarden();
+      
+      // Música
+      bgMusic.play().then(() => { isPlayingMusic = true; }).catch(e => console.log(e));
 
-      bgMusic.play().then(() => {
-        isPlayingMusic = true;
-        document.getElementById('music-btn').innerText = '🎵 Música On';
-      }).catch(err => {
-        console.log("Autoplay bloqueado por el navegador:", err);
-      });
+      // Aparece la Carta
+      setTimeout(() => {
+        document.getElementById('letter').classList.add('visible');
+        createFlowerGarden();
+        createHeartExplosion();
+      }, 500);
     });
 
-    // Botón de Música
+    // PASO 2: BOTÓN CONTINUAR A LAS FOTOS
+    document.getElementById('continue-btn').addEventListener('click', () => {
+      document.getElementById('letter').style.display = 'none';
+      startPhotoSequence();
+    });
+
+    // SECUENCIA DE FOTOS CON EFECTOS
+    function startPhotoSequence() {
+      // FOTO 1: Explosión y Fuegos Artificiales
+      const card0 = document.getElementById('card-0');
+      card0.classList.add('active');
+      fireworks.push(new Firework(fxCanvas.width * 0.3, fxCanvas.height * 0.3));
+      fireworks.push(new Firework(fxCanvas.width * 0.7, fxCanvas.height * 0.3));
+
+      // FOTO 2: Lluvia de Corazones de varios tamaños
+      setTimeout(() => {
+        card0.classList.remove('active');
+        const card1 = document.getElementById('card-1');
+        card1.classList.add('active');
+
+        for (let i = 0; i < 40; i++) {
+          setTimeout(() => {
+            particles.push(new HeartParticle(Math.random() * fxCanvas.width, -20, false));
+          }, i * 80);
+        }
+      }, 4000);
+
+      // FOTO 3: Destellos
+      setTimeout(() => {
+        document.getElementById('card-1').classList.remove('active');
+        const card2 = document.getElementById('card-2');
+        card2.classList.add('active');
+        fireworks.push(new Firework(fxCanvas.width / 2, fxCanvas.height * 0.25));
+      }, 8000);
+
+      // FOTO 4: Mas Corazones
+      setTimeout(() => {
+        document.getElementById('card-2').classList.remove('active');
+        const card3 = document.getElementById('card-3');
+        card3.classList.add('active');
+
+        for (let i = 0; i < 30; i++) {
+          particles.push(new HeartParticle(fxCanvas.width / 2 + (Math.random() - 0.5) * 300, fxCanvas.height / 2, true));
+        }
+      }, 12000);
+
+      // GRAN CIERRE: TODAS LAS FOTOS SE JUNTAN, DEJAN SEMILLAS, VUELVEN A FLORECER Y FUEGOS ARTIFICIALES
+      setTimeout(() => {
+        document.getElementById('card-3').classList.remove('active');
+
+        // Unir las 4 fotos en estilo collage
+        const offsets = [
+          { x: -180, y: -100, r: -8 },
+          { x: 180, y: -100, r: 8 },
+          { x: -180, y: 100, r: 6 },
+          { x: 180, y: 100, r: -6 }
+        ];
+
+        for (let i = 0; i < 4; i++) {
+          const card = document.getElementById(`card-${i}`);
+          card.classList.add('collage-mode');
+          card.style.transform = `translate(${offsets[i].x}px, ${offsets[i].y}px) rotate(${offsets[i].r}deg) scale(0.85)`;
+        }
+
+        // Caída de semillas
+        flowers.forEach(f => {
+          seeds.push(new Seed(f.x, f.targetY));
+        });
+
+        // Reiniciar flores y re-florecer
+        setTimeout(() => {
+          flowers = [];
+          createFlowerGarden();
+
+          // Gran espectáculo de Fuegos Artificiales
+          let fwCount = 0;
+          const fwInterval = setInterval(() => {
+            fireworks.push(new Firework(Math.random() * fxCanvas.width, Math.random() * (fxCanvas.height * 0.5)));
+            fwCount++;
+            if (fwCount > 12) clearInterval(fwInterval);
+          }, 350);
+        }, 1500);
+
+      }, 16000);
+    }
+
+    // BOTÓN MÚSICA
     document.getElementById('music-btn').addEventListener('click', () => {
       if (isPlayingMusic) {
         bgMusic.pause();
@@ -788,64 +667,6 @@
         document.getElementById('music-btn').innerText = '🎵 Música On';
       }
       isPlayingMusic = !isPlayingMusic;
-    });
-
-    // Lluvia de Pétalos Amarillos sobresaliente
-    document.getElementById('petals-btn').addEventListener('click', () => {
-      for (let i = 0; i < 50; i++) {
-        petals.push(new Petal());
-      }
-    });
-
-    // Lluvia de Corazones sobresaliente
-    document.getElementById('hearts-btn').addEventListener('click', () => {
-      for (let i = 0; i < 40; i++) {
-        hearts.push(new Heart());
-      }
-    });
-
-    // Reiniciar Jardín
-    document.getElementById('clear-btn').addEventListener('click', () => {
-      flowers = [];
-      butterflies = [];
-      spawnGarden();
-    });
-
-    // Cambiar Foto de Pareja
-    function nextPhoto() {
-      photoIndex = (photoIndex + 1) % photos.length;
-      const img = document.getElementById('current-photo');
-      const caption = document.getElementById('photo-caption');
-      
-      img.style.opacity = '0';
-      setTimeout(() => {
-        img.src = photos[photoIndex].url;
-        caption.innerText = photos[photoIndex].caption;
-        img.style.opacity = '1';
-      }, 300);
-    }
-
-    document.getElementById('polaroid-box').addEventListener('click', nextPhoto);
-    document.getElementById('next-photo-btn').addEventListener('click', nextPhoto);
-
-    /* MODAL DE EDICIÓN DE TEXTO */
-    const modal = document.getElementById('modal-overlay');
-    document.getElementById('edit-btn').addEventListener('click', () => {
-      modal.classList.remove('modal-hidden');
-    });
-
-    document.getElementById('cancel-btn').addEventListener('click', () => {
-      modal.classList.add('modal-hidden');
-    });
-
-    document.getElementById('save-btn').addEventListener('click', () => {
-      const newTitle = document.getElementById('input-title').value;
-      const newMessage = document.getElementById('input-message').value;
-
-      if (newTitle) document.getElementById('title-text').innerText = newTitle;
-      if (newMessage) document.getElementById('message-text').innerText = newMessage;
-
-      modal.classList.add('modal-hidden');
     });
   </script>
 </body>
