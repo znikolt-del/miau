@@ -4,12 +4,197 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>¡Feliz Día de la Primavera! 🌸</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* PANTALLA DE BIENVENIDA */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .flower-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .envelope-card h1 {
+      color: #d946ef;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .envelope-card p {
+      color: #475569;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* BOTONES */
+    button {
+      background: linear-gradient(45deg, #ec4899, #f43f5e);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    /* CANVAS Y UI */
+    #garden-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .ui-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 2rem;
+      pointer-events: none;
+    }
+
+    .message-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem 2rem;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 550px;
+      margin: 0 1rem;
+      pointer-events: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .message-card h1 {
+      color: #e11d48;
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .message-card p {
+      color: #334155;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    #edit-btn {
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.85rem;
+      padding: 0.4rem 1rem;
+    }
+
+    .action-buttons {
+      margin-top: 1rem;
+      display: flex;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.9);
+      color: #1e293b;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+    }
+
+    /* MODAL OCULTO POR DEFECTO */
+    .modal-hidden {
+      display: none !important;
+    }
+
+    #modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .modal-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 450px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-card input, .modal-card textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    #cancel-btn {
+      background: #94a3b8;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- PANTALLA DE BIENVENIDA / CARTA SORPRESA -->
+  <!-- PANTALLA DE BIENVENIDA -->
   <div id="intro-overlay" class="overlay">
     <div class="envelope-card">
       <div class="flower-icon">🌻</div>
@@ -23,7 +208,6 @@
   <div id="main-content">
     <canvas id="garden-canvas"></canvas>
 
-    <!-- MENSAJE Y CONTROLES -->
     <div class="ui-container">
       <div class="message-card">
         <h1 id="title-text">¡Feliz Día de la Primavera! 🌷</h1>
@@ -32,14 +216,14 @@
       </div>
 
       <div class="action-buttons">
-        <button id="music-btn" class="icon-btn" title="Música de fondo">🎵</button>
-        <button id="petals-btn" class="icon-btn" title="Lluvia de pétalos">🌸 Lluvia</button>
-        <button id="clear-btn" class="icon-btn" title="Reiniciar Jardín">🔄 Limpiar</button>
+        <button id="music-btn" class="icon-btn">🎵 Música</button>
+        <button id="petals-btn" class="icon-btn">🌸 Lluvia de Pétalos</button>
+        <button id="clear-btn" class="icon-btn">🔄 Reiniciar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL PARA EDITAR EL MENSAJE -->
+  <!-- MODAL PARA EDITAR -->
   <div id="modal-overlay" class="modal-hidden">
     <div class="modal-card">
       <h2>Escribe tu Dedicatoria</h2>
@@ -52,6 +236,205 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const canvas = document.getElementById('garden-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let flowers = [];
+    let petals = [];
+    let audioContext = null;
+    let isPlayingMusic = false;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Flower {
+      constructor(x, y) {
+        this.x = x;
+        this.y = window.innerHeight;
+        this.targetY = y;
+        this.stemHeight = 0;
+        this.maxStemHeight = window.innerHeight - y;
+        this.petalSize = 0;
+        this.maxPetalSize = Math.random() * 20 + 20;
+        this.petalCount = Math.floor(Math.random() * 4) + 6;
+        this.color = ['#ff7675', '#fd79a8', '#fdcb6e', '#e84393', '#00b894'][Math.floor(Math.random() * 5)];
+        this.growthSpeed = Math.random() * 4 + 4;
+      }
+
+      update() {
+        if (this.stemHeight < this.maxStemHeight) {
+          this.stemHeight += this.growthSpeed;
+        } else if (this.petalSize < this.maxPetalSize) {
+          this.petalSize += 0.8;
+        }
+      }
+
+      draw() {
+        const currentY = window.innerHeight - this.stemHeight;
+
+        ctx.beginPath();
+        ctx.moveTo(this.x, window.innerHeight);
+        ctx.quadraticCurveTo(this.x + 10, window.innerHeight - this.stemHeight / 2, this.x, currentY);
+        ctx.strokeStyle = '#2ed573';
+        ctx.lineWidth = 6;
+        ctx.stroke();
+
+        if (this.stemHeight >= this.maxStemHeight) {
+          ctx.save();
+          ctx.translate(this.x, currentY);
+          for (let i = 0; i < this.petalCount; i++) {
+            ctx.rotate((Math.PI * 2) / this.petalCount);
+            ctx.beginPath();
+            ctx.ellipse(0, this.petalSize, this.petalSize / 2, this.petalSize, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+          }
+          ctx.beginPath();
+          ctx.arc(0, 0, this.petalSize / 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffeaa7';
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+    }
+
+    class Petal {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = -20;
+        this.size = Math.random() * 8 + 6;
+        this.speedY = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 2 - 1;
+        this.color = '#ff7675';
+        this.angle = Math.random() * 360;
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.angle += 0.02;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = 0.8;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      flowers.forEach((flower) => {
+        flower.update();
+        flower.draw();
+      });
+
+      petals.forEach((petal, index) => {
+        petal.update();
+        petal.draw();
+        if (petal.y > canvas.height) petals.splice(index, 1);
+      });
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    function spawnInitialFlowers() {
+      const count = Math.floor(window.innerWidth / 120);
+      for (let i = 0; i < count; i++) {
+        const x = (canvas.width / count) * i + Math.random() * 40;
+        const y = canvas.height - (Math.random() * 200 + 150);
+        flowers.push(new Flower(x, y));
+      }
+    }
+
+    canvas.addEventListener('click', (e) => {
+      flowers.push(new Flower(e.clientX, e.clientY));
+    });
+
+    function playTone(freq, duration) {
+      if (!audioContext) return;
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+      gain.gain.setValueAtTime(0.05, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.start();
+      osc.stop(audioContext.currentTime + duration);
+    }
+
+    function startMelody() {
+      const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23];
+      let noteIndex = 0;
+      setInterval(() => {
+        if (isPlayingMusic) {
+          playTone(notes[noteIndex], 1.5);
+          noteIndex = (noteIndex + 1) % notes.length;
+        }
+      }, 800);
+    }
+
+    document.getElementById('start-btn').addEventListener('click', () => {
+      document.getElementById('intro-overlay').classList.add('hidden');
+      spawnInitialFlowers();
+      
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        isPlayingMusic = true;
+        startMelody();
+      } catch (e) {
+        console.log("Audio no soportado");
+      }
+    });
+
+    document.getElementById('music-btn').addEventListener('click', () => {
+      isPlayingMusic = !isPlayingMusic;
+      document.getElementById('music-btn').innerText = isPlayingMusic ? '🎵 Música' : '🔇 Silencio';
+    });
+
+    document.getElementById('petals-btn').addEventListener('click', () => {
+      for (let i = 0; i < 30; i++) {
+        petals.push(new Petal());
+      }
+    });
+
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      flowers = [];
+    });
+
+    const modal = document.getElementById('modal-overlay');
+    document.getElementById('edit-btn').addEventListener('click', () => {
+      modal.classList.remove('modal-hidden');
+    });
+
+    document.getElementById('cancel-btn').addEventListener('click', () => {
+      modal.classList.add('modal-hidden');
+    });
+
+    document.getElementById('save-btn').addEventListener('click', () => {
+      const newTitle = document.getElementById('input-title').value;
+      const newMessage = document.getElementById('input-message').value;
+
+      if (newTitle) document.getElementById('title-text').innerText = newTitle;
+      if (newMessage) document.getElementById('message-text').innerText = newMessage;
+
+      modal.classList.add('modal-hidden');
+    });
+  </script>
 </body>
 </html>
