@@ -3,16 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Espacio Interactivo</title>
+  <title>¡Feliz Día de la Primavera! 🌸</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="card">
-    <h1>Espacio Interactivo</h1>
-    <p>Haz clic para generar elementos dinámicos en pantalla.</p>
-    <button id="actionBtn">¡Crear Elemento!</button>
-    <div id="container"></div>
+
+  <!-- PANTALLA DE BIENVENIDA / CARTA SORPRESA -->
+  <div id="intro-overlay" class="overlay">
+    <div class="envelope-card">
+      <div class="flower-icon">🌻</div>
+      <h1>Un regalo especial para ti</h1>
+      <p>Haz clic en el botón para abrir tu jardín primaveral con música y sorpresas.</p>
+      <button id="start-btn">✨ Abrir Sorpresa ✨</button>
+    </div>
   </div>
+
+  <!-- JARDÍN INTERACTIVO -->
+  <div id="main-content">
+    <canvas id="garden-canvas"></canvas>
+
+    <!-- MENSAJE Y CONTROLES -->
+    <div class="ui-container">
+      <div class="message-card">
+        <h1 id="title-text">¡Feliz Día de la Primavera! 🌷</h1>
+        <p id="message-text">Que este nuevo ciclo florezca lleno de alegría, amor, luz y colores para tu vida.</p>
+        <button id="edit-btn">✏️ Personalizar Mensaje</button>
+      </div>
+
+      <div class="action-buttons">
+        <button id="music-btn" class="icon-btn" title="Música de fondo">🎵</button>
+        <button id="petals-btn" class="icon-btn" title="Lluvia de pétalos">🌸 Lluvia</button>
+        <button id="clear-btn" class="icon-btn" title="Reiniciar Jardín">🔄 Limpiar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PARA EDITAR EL MENSAJE -->
+  <div id="modal-overlay" class="modal-hidden">
+    <div class="modal-card">
+      <h2>Escribe tu Dedicatoria</h2>
+      <input type="text" id="input-title" placeholder="Título (Ej: ¡Feliz Día mi Amor!)">
+      <textarea id="input-message" rows="4" placeholder="Escribe tu mensaje personalizado aquí..."></textarea>
+      <div class="modal-actions">
+        <button id="save-btn">Guardar</button>
+        <button id="cancel-btn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
