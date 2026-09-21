@@ -31,7 +31,7 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      transition: opacity 1.2s ease, visibility 1.2s ease;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
 
     .overlay.hidden {
@@ -127,7 +127,7 @@
     #garden-canvas { z-index: 5; }
     #fx-canvas { z-index: 500; }
 
-    /* LAYOUT PRINCIPAL (PERMANENTE) */
+    /* LAYOUT PRINCIPAL */
     .main-layout {
       position: relative;
       z-index: 10;
@@ -178,11 +178,16 @@
     }
 
     .click-hint {
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       color: #fef08a;
-      opacity: 0.8;
-      margin-top: 0.5rem;
-      font-style: italic;
+      opacity: 0.9;
+      margin-top: 0.8rem;
+      font-weight: 600;
+      background: rgba(234, 179, 8, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      display: inline-block;
+      border: 1px solid rgba(250, 204, 21, 0.4);
     }
 
     /* SECCIÓN DE FOTOS INTERACTIVA */
@@ -291,7 +296,7 @@
 
   <button id="music-btn" class="music-toggle">🎵 Música On</button>
 
-  <!-- PANTALLA DE BIENVENIDA -->
+  <!-- PANTALLA DE BIENVENIDA / SOBRE -->
   <div id="intro-overlay" class="overlay">
     <div class="welcome-card">
       <div class="yellow-flower-icon">🌻💛</div>
@@ -307,7 +312,7 @@
 
   <div class="main-layout">
     <!-- CARTA INTERACTIVA SIEMPRE VISIBLE -->
-    <div id="letter" class="letter-card" title="Haz clic aquí para avanzar en la historia">
+    <div id="letter" class="letter-card" title="Haz clic aquí para iniciar o avanzar">
       <h1>Feliz Día de la Primavera 💛</h1>
       <p id="letter-paragraph">Como las flores amarillas que buscan la luz del sol, mi corazón siempre florece a tu lado. Gracias por llenar mi vida de alegría, amor y momentos inolvidables.</p>
       <div class="click-hint">✨ Men Aquí Mi Amor ✨</div>
@@ -315,7 +320,7 @@
 
     <!-- ETAPA DE FOTOS CONTROLADA -->
     <div id="photo-stage" class="photo-stage">
-      <div class="polaroid-card active" id="card-0" title="Haz clic para avanzar">
+      <div class="polaroid-card" id="card-0" title="Haz clic para avanzar">
         <div class="polaroid-img-container">
           <img src="./foto1.jpg" alt="Foto 1" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
         </div>
@@ -346,10 +351,10 @@
 
     <!-- BOTONES DE NAVEGACIÓN Y EFECTOS CONTROLADOS -->
     <div class="action-bar">
-      <button id="next-photo-btn" class="btn-main">📸</button>
-      <button id="fireworks-btn" class="btn-secondary">🎆 </button>
-      <button id="hearts-btn" class="btn-secondary">💖 </button>
-      <button id="rebloom-btn" class="btn-secondary">🌻 </button>
+      <button id="next-photo-btn" class="btn-main">📸 Siguiente</button>
+      <button id="fireworks-btn" class="btn-secondary">🎆 Fuegos Artificiales</button>
+      <button id="hearts-btn" class="btn-secondary">💖 Corazones</button>
+      <button id="rebloom-btn" class="btn-secondary">🌻 Reflorecer</button>
     </div>
   </div>
 
@@ -366,7 +371,7 @@
     let seeds = [];
     let time = 0;
     let isPlayingMusic = false;
-    let step = 0; // 0: Foto1, 1: Foto2, 2: Foto3, 3: Foto4, 4: Collage Final
+    let step = -1; // -1: Solo carta, 0: Foto1, 1: Foto2, 2: Foto3, 3: Foto4, 4: Collage Final
     const totalPhotos = 4;
 
     function resizeCanvas() {
@@ -677,7 +682,6 @@
     }
 
     function triggerAutomaticEffects() {
-      // Disparar Fuegos artificiales + Lluvia de corazones en cada avance
       fireworks.push(new Firework(Math.random() * (fxCanvas.width * 0.7) + fxCanvas.width * 0.15, Math.random() * (fxCanvas.height * 0.4) + 100));
       fireworks.push(new Firework(Math.random() * (fxCanvas.width * 0.7) + fxCanvas.width * 0.15, Math.random() * (fxCanvas.height * 0.4) + 100));
       
@@ -687,7 +691,12 @@
     }
 
     function advanceSequence() {
-      if (step < 3) {
+      if (step === -1) {
+        // PRIMER CLIC EN "Men Aquí Mi Amor": Muestra la foto 1
+        step = 0;
+        document.getElementById('card-0').classList.add('active');
+        triggerAutomaticEffects();
+      } else if (step < 3) {
         // Ocultar foto actual
         document.getElementById(`card-${step}`).classList.remove('active');
         step++;
@@ -695,7 +704,7 @@
         document.getElementById(`card-${step}`).classList.add('active');
         triggerAutomaticEffects();
       } else if (step === 3) {
-        // Pasa al MODO COLLAGE FINAL
+        // MODO COLLAGE FINAL
         step = 4;
         const offsets = [
           { x: -170, y: -80, r: -8 },
@@ -710,7 +719,6 @@
           card.style.transform = `translate(${offsets[i].x}px, ${offsets[i].y}px) rotate(${offsets[i].r}deg) scale(0.8)`;
         }
 
-        // Semillas y espectáculo
         flowers.forEach(f => seeds.push(new Seed(f.x, f.targetY)));
         for (let i = 0; i < 6; i++) {
           setTimeout(() => {
@@ -718,16 +726,17 @@
           }, i * 250);
         }
       } else {
-        // REINICIAR Y VOLVER AL INICIO (CARTA + FOTO 1)
-        step = 0;
+        // AL COMPLETAR TODO: REGRESAR AL SOBRE CERRO INICIAL
+        step = -1;
         for (let i = 0; i < totalPhotos; i++) {
           const card = document.getElementById(`card-${i}`);
           card.classList.remove('collage-mode', 'active');
           card.style.transform = '';
         }
-        document.getElementById('card-0').classList.add('active');
-        spawnGarden();
-        triggerAutomaticEffects();
+        flowers = [];
+        particles = [];
+        seeds = [];
+        document.getElementById('intro-overlay').classList.remove('hidden');
       }
     }
 
@@ -737,10 +746,13 @@
       bgMusic.play().then(() => { isPlayingMusic = true; }).catch(e => console.log(e));
 
       spawnGarden();
-      triggerAutomaticEffects();
+      // Ocurre únicamente la lluvia de corazones inicial al abrir la carta sin fotos
+      for (let i = 0; i < 25; i++) {
+        particles.push(new HeartParticle(Math.random() * fxCanvas.width, -20, false));
+      }
     });
 
-    // AVANZAR AL HACER CLIC EN LA CARTA O EN CUALQUIER FOTO
+    // AVANZAR AL HACER CLIC EN LA CARTA O EN LAS FOTOS
     document.getElementById('letter').addEventListener('click', advanceSequence);
     document.getElementById('photo-stage').addEventListener('click', advanceSequence);
     document.getElementById('next-photo-btn').addEventListener('click', advanceSequence);
