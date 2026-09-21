@@ -96,15 +96,26 @@
       background: linear-gradient(135deg, #facc15 0%, #d97706 100%);
     }
 
-    /* CANVAS DE JARDÍN */
+    /* CANVAS 1: JARDÍN Y FLORES (z-index: 5, sobre el fondo y tarjetas semitransparentes) */
     #garden-canvas {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 1;
-      pointer-events: auto;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* CANVAS 2: LLUVIA Y EFECTOS SOBRE TODO (z-index: 500) */
+    #rain-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 500;
+      pointer-events: none;
     }
 
     /* CONTENEDOR PRINCIPAL DE INTERFAZ */
@@ -121,8 +132,8 @@
 
     /* TARJETA DE MENSAJE */
     .message-container {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(16px);
+      background: rgba(17, 24, 39, 0.65);
+      backdrop-filter: blur(12px);
       padding: 2rem 2.5rem;
       border-radius: 24px;
       text-align: center;
@@ -334,8 +345,11 @@
     </div>
   </div>
 
-  <!-- INTERFAZ PRINCIPAL Y JARDÍN INTERACTIVO -->
+  <!-- CANVAS DEDICADO A FLORES Y MARIPOSAS -->
   <canvas id="garden-canvas"></canvas>
+
+  <!-- CANVAS DEDICADO A LLUVIA DE PÉTALOS, CORAZONES Y DESTELLOS SOBRE TODO -->
+  <canvas id="rain-canvas"></canvas>
 
   <div class="main-layout">
     <!-- CARTA DE AMOR DE PRIMAVERA -->
@@ -357,11 +371,11 @@
 
     <!-- BOTONES INTERACTIVOS -->
     <div class="action-bar">
-      <button id="music-btn" class="btn-secondary">🎵 Música On</button>
-      <button id="petals-btn" class="btn-secondary">🌻 Lluvia Amarilla</button>
+      <button id="music-btn" class="btn-secondary">🎵 </button>
+      <button id="petals-btn" class="btn-secondary">🌻 Toca Aquí Miau</button>
       <button id="hearts-btn" class="btn-secondary">💖 Lluvia de Corazones</button>
-      <button id="next-photo-btn" class="btn-secondary">📸 Cambiar Foto</button>
-      <button id="clear-btn" class="btn-secondary">🔄 Reiniciar Jardín</button>
+      <button id="next-photo-btn" class="btn-secondary">📸 Nosotros</button>
+      <button id="clear-btn" class="btn-secondary">🔄 Crecer</button>
     </div>
   </div>
 
@@ -379,9 +393,13 @@
   </div>
 
   <script>
-    /* --- CONFIGURACIÓN DEL CANVAS Y AUDIO --- */
-    const canvas = document.getElementById('garden-canvas');
-    const ctx = canvas.getContext('2d');
+    /* --- CONFIGURACIÓN DE CANVAS Y AUDIO --- */
+    const gardenCanvas = document.getElementById('garden-canvas');
+    const gardenCtx = gardenCanvas.getContext('2d');
+
+    const rainCanvas = document.getElementById('rain-canvas');
+    const rainCtx = rainCanvas.getContext('2d');
+
     const bgMusic = document.getElementById('bg-music');
 
     let flowers = [];
@@ -394,49 +412,53 @@
 
     /* --- CARRUSEL DE FOTOS DE PAREJA --- */
     const photos = [
-      { url: './foto1.jpg', caption: 'Momento Especial 💛' },
+      { url: './foto1.jpg', caption: 'Mi Lugar Favorito 💛' },
       { url: './foto2.jpg', caption: 'Juntos Siempre ✨' },
-      { url: './foto3.jpg', caption: 'Mi Lugar Favorito 🥰' },
+      { url: './foto3.jpg', caption: 'Momento Especial 🥰' },
       { url: './foto4.jpg', caption: 'Amor Infinito 🌸' }
     ];
     let photoIndex = 0;
 
     function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      gardenCanvas.width = window.innerWidth;
+      gardenCanvas.height = window.innerHeight;
+      rainCanvas.width = window.innerWidth;
+      rainCanvas.height = window.innerHeight;
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    /* --- CLASE FLOR PROFESIONAL (Girasoles, Rosas Amarillas y Margaritas) --- */
+    /* --- CLASE FLOR MEJORADA (CRECIMIENTO PROGRESIVO Y DIFERENTES TAMAÑOS) --- */
     class Flower {
-      constructor(x, y) {
+      constructor(x, y, scale = 1) {
         this.x = x;
         this.y = window.innerHeight;
         this.targetY = y;
+        this.scale = scale; // Factor de tamaño variado (pequeñas, medianas, grandes)
         this.stemHeight = 0;
-        this.maxStemHeight = window.innerHeight - y;
+        this.maxStemHeight = (window.innerHeight - y);
         this.petalProgress = 0;
-        this.type = Math.random(); // 0-0.5: Girasol, 0.5-0.8: Rosa Amarilla, 0.8-1.0: Tulipán/Margarita
-        
+        this.type = Math.random();
+
         if (this.type < 0.5) {
           // GIRASOL AMARILLO
           this.petalCount = 14;
-          this.maxPetalSize = Math.random() * 20 + 30;
+          this.maxPetalSize = (Math.random() * 20 + 30) * this.scale;
           this.palette = { inner: '#eab308', outer: '#fef08a', center1: '#451a03', center2: '#78350f' };
         } else if (this.type < 0.8) {
           // ROSA AMARILLA / DORADA
           this.petalCount = 10;
-          this.maxPetalSize = Math.random() * 18 + 26;
+          this.maxPetalSize = (Math.random() * 18 + 26) * this.scale;
           this.palette = { inner: '#f59e0b', outer: '#fef08a', center1: '#ca8a04', center2: '#eab308' };
         } else {
           // MARGARITA PRIMAVERAL
           this.petalCount = 12;
-          this.maxPetalSize = Math.random() * 15 + 22;
+          this.maxPetalSize = (Math.random() * 15 + 22) * this.scale;
           this.palette = { inner: '#ffffff', outer: '#fef9c3', center1: '#eab308', center2: '#ca8a04' };
         }
 
-        this.growthSpeed = Math.random() * 3 + 3.5;
+        // Crecimiento pausado y suave poco a poco
+        this.growthSpeed = (Math.random() * 1.5 + 1.2);
         this.swayOffset = Math.random() * 100;
       }
 
@@ -444,12 +466,12 @@
         if (this.stemHeight < this.maxStemHeight) {
           this.stemHeight += this.growthSpeed;
         } else if (this.petalProgress < 1) {
-          this.petalProgress += 0.025;
+          this.petalProgress += 0.012; // Despliegue de pétalos progresivo y sutil
         }
       }
 
-      draw() {
-        const sway = Math.sin(time * 0.002 + this.swayOffset) * 14 * (this.stemHeight / this.maxStemHeight);
+      draw(ctx) {
+        const sway = Math.sin(time * 0.002 + this.swayOffset) * (12 * this.scale) * (this.stemHeight / this.maxStemHeight);
         const flowerHeadX = this.x + sway;
         const currentY = window.innerHeight - this.stemHeight;
 
@@ -462,7 +484,7 @@
         ctx.moveTo(this.x, window.innerHeight);
         ctx.quadraticCurveTo(this.x + sway * 0.5, window.innerHeight - this.stemHeight * 0.5, flowerHeadX, currentY);
         ctx.strokeStyle = stemGrad;
-        ctx.lineWidth = 6;
+        ctx.lineWidth = Math.max(3, 6 * this.scale);
         ctx.stroke();
 
         // Hojas
@@ -471,7 +493,7 @@
           ctx.translate(this.x + sway * 0.3, window.innerHeight - this.stemHeight * 0.4);
           ctx.rotate(0.35);
           ctx.beginPath();
-          ctx.ellipse(0, 0, 20, 8, 0, 0, Math.PI * 2);
+          ctx.ellipse(0, 0, 20 * this.scale, 8 * this.scale, 0, 0, Math.PI * 2);
           ctx.fillStyle = '#22c55e';
           ctx.fill();
           ctx.restore();
@@ -497,7 +519,7 @@
             ctx.beginPath();
             ctx.ellipse(0, currentPetalSize * 0.7, currentPetalSize * 0.32, currentPetalSize * 0.75, 0, 0, Math.PI * 2);
             ctx.fillStyle = petalGrad;
-            ctx.shadowColor = 'rgba(0,0,0,0.2)';
+            ctx.shadowColor = 'rgba(0,0,0,0.25)';
             ctx.shadowBlur = 6;
             ctx.fill();
             ctx.restore();
@@ -522,8 +544,8 @@
     /* --- CLASE MARIPOSA DORADA --- */
     class Butterfly {
       constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * (canvas.height * 0.6);
+        this.x = Math.random() * gardenCanvas.width;
+        this.y = Math.random() * (gardenCanvas.height * 0.6);
         this.size = Math.random() * 6 + 11;
         this.vx = (Math.random() - 0.5) * 1.6;
         this.vy = (Math.random() - 0.5) * 1.6;
@@ -537,13 +559,13 @@
         this.y += this.vy + Math.cos(time * 0.003);
         this.wingAngle += this.wingSpeed;
 
-        if (this.x < -20) this.x = canvas.width + 20;
-        if (this.x > canvas.width + 20) this.x = -20;
-        if (this.y < -20) this.y = canvas.height * 0.7;
-        if (this.y > canvas.height * 0.7) this.y = 50;
+        if (this.x < -20) this.x = gardenCanvas.width + 20;
+        if (this.x > gardenCanvas.width + 20) this.x = -20;
+        if (this.y < -20) this.y = gardenCanvas.height * 0.7;
+        if (this.y > gardenCanvas.height * 0.7) this.y = 50;
       }
 
-      draw() {
+      draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
         const wingScale = Math.abs(Math.sin(this.wingAngle));
@@ -579,14 +601,14 @@
     /* --- CLASE PÉTALOS Y CORAZONES LLUVIA --- */
     class Petal {
       constructor() {
-        this.x = Math.random() * canvas.width;
+        this.x = Math.random() * rainCanvas.width;
         this.y = -20;
-        this.size = Math.random() * 8 + 7;
-        this.speedY = Math.random() * 1.5 + 1.2;
+        this.size = Math.random() * 9 + 8;
+        this.speedY = Math.random() * 1.8 + 1.2;
         this.speedX = Math.random() * 1.6 - 0.8;
         this.rotation = Math.random() * 360;
         this.rotSpeed = Math.random() * 0.04 - 0.02;
-        this.color = ['rgba(250, 204, 21, 0.85)', 'rgba(245, 158, 11, 0.85)', 'rgba(254, 240, 138, 0.9)'][Math.floor(Math.random() * 3)];
+        this.color = ['rgba(250, 204, 21, 0.95)', 'rgba(245, 158, 11, 0.95)', 'rgba(254, 240, 138, 0.95)'][Math.floor(Math.random() * 3)];
       }
 
       update() {
@@ -595,13 +617,15 @@
         this.rotation += this.rotSpeed;
       }
 
-      draw() {
+      draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
         ctx.beginPath();
-        ctx.ellipse(0, 0, this.size, this.size * 0.5, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, this.size, this.size * 0.55, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
+        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+        ctx.shadowBlur = 4;
         ctx.fill();
         ctx.restore();
       }
@@ -609,12 +633,12 @@
 
     class Heart {
       constructor() {
-        this.x = Math.random() * canvas.width;
+        this.x = Math.random() * rainCanvas.width;
         this.y = -20;
-        this.size = Math.random() * 12 + 10;
-        this.speedY = Math.random() * 1.8 + 1;
+        this.size = Math.random() * 14 + 11;
+        this.speedY = Math.random() * 2 + 1.2;
         this.speedX = Math.random() * 1.4 - 0.7;
-        this.opacity = Math.random() * 0.5 + 0.5;
+        this.opacity = Math.random() * 0.4 + 0.6;
       }
 
       update() {
@@ -622,11 +646,13 @@
         this.x += this.speedX + Math.sin(time * 0.003);
       }
 
-      draw() {
+      draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.globalAlpha = this.opacity;
         ctx.fillStyle = '#f43f5e';
+        ctx.shadowColor = 'rgba(244, 63, 94, 0.5)';
+        ctx.shadowBlur = 8;
         ctx.beginPath();
         const topCurveHeight = this.size * 0.3;
         ctx.moveTo(0, topCurveHeight);
@@ -643,7 +669,7 @@
       constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = Math.random() * 4 + 1;
+        this.size = Math.random() * 5 + 2;
         this.alpha = 1;
         this.decay = Math.random() * 0.025 + 0.015;
       }
@@ -652,42 +678,47 @@
         this.alpha -= this.decay;
       }
 
-      draw() {
+      draw(ctx) {
         ctx.save();
         ctx.globalAlpha = Math.max(0, this.alpha);
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = '#fef08a';
         ctx.shadowColor = '#facc15';
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 12;
         ctx.fill();
         ctx.restore();
       }
     }
 
-    /* --- BUCLE DE ANIMACIÓN --- */
+    /* --- BUCLE DE ANIMACIÓN DOS CANVASES --- */
     function animate(timestamp) {
       time = timestamp || 0;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Limpiar ambos canvas
+      gardenCtx.clearRect(0, 0, gardenCanvas.width, gardenCanvas.height);
+      rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
 
-      flowers.forEach(f => { f.update(); f.draw(); });
-      butterflies.forEach(b => { b.update(); b.draw(); });
+      // Dibujar Jardín y Flores
+      flowers.forEach(f => { f.update(); f.draw(gardenCtx); });
+      butterflies.forEach(b => { b.update(); b.draw(gardenCtx); });
 
+      // Dibujar Lluvia sobre todo
       petals.forEach((p, idx) => {
         p.update();
-        p.draw();
-        if (p.y > canvas.height + 20) petals.splice(idx, 1);
+        p.draw(rainCtx);
+        if (p.y > rainCanvas.height + 20) petals.splice(idx, 1);
       });
 
       hearts.forEach((h, idx) => {
         h.update();
-        h.draw();
-        if (h.y > canvas.height + 20) hearts.splice(idx, 1);
+        h.draw(rainCtx);
+        if (h.y > rainCanvas.height + 20) hearts.splice(idx, 1);
       });
 
       sparkles.forEach((s, idx) => {
         s.update();
-        s.draw();
+        s.draw(rainCtx);
         if (s.alpha <= 0) sparkles.splice(idx, 1);
       });
 
@@ -695,27 +726,42 @@
     }
     animate();
 
-    /* --- EVENTOS E INTERACCIONES --- */
+    /* --- GENERACIÓN PROGRESIVA Y VARIADA DE FLORES --- */
     function spawnGarden() {
       flowers = [];
-      const count = Math.floor(window.innerWidth / 120);
-      for (let i = 0; i < count; i++) {
-        const x = (canvas.width / count) * i + Math.random() * 35 + 15;
-        const y = canvas.height - (Math.random() * 200 + 170);
-        flowers.push(new Flower(x, y));
+      const totalFlowers = Math.floor(window.innerWidth / 70); // Mayor cantidad de flores
+      
+      // Crecimiento paulatino con un desfase de tiempo para cada flor
+      for (let i = 0; i < totalFlowers; i++) {
+        setTimeout(() => {
+          const x = (gardenCanvas.width / totalFlowers) * i + (Math.random() * 40 - 20);
+          
+          // Posición Y variada para distintos niveles de altura
+          const y = gardenCanvas.height - (Math.random() * 260 + 120);
+          
+          // Factor de escala variado para alternar flores pequeñas, medianas y grandes
+          const scale = Math.random() * 0.7 + 0.6; 
+          
+          flowers.push(new Flower(x, y, scale));
+        }, i * 180); // Aparecen secuencialmente poco a poco
       }
 
       butterflies = [];
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 7; i++) {
         butterflies.push(new Butterfly());
       }
     }
 
-    // Dibujar flor al hacer clic en el canvas
-    canvas.addEventListener('click', (e) => {
-      flowers.push(new Flower(e.clientX, e.clientY));
-      for (let i = 0; i < 10; i++) {
-        sparkles.push(new Sparkle(e.clientX + (Math.random() - 0.5) * 50, e.clientY + (Math.random() - 0.5) * 50));
+    // Dibujar flor al hacer clic en cualquier lugar
+    document.addEventListener('click', (e) => {
+      // Si el clic no fue en un botón ni modal, nacen destellos y flores
+      if (!e.target.closest('button') && !e.target.closest('.modal-card') && !e.target.closest('.welcome-card')) {
+        const scale = Math.random() * 0.6 + 0.7;
+        flowers.push(new Flower(e.clientX, e.clientY, scale));
+        
+        for (let i = 0; i < 12; i++) {
+          sparkles.push(new Sparkle(e.clientX + (Math.random() - 0.5) * 60, e.clientY + (Math.random() - 0.5) * 60));
+        }
       }
     });
 
@@ -744,24 +790,25 @@
       isPlayingMusic = !isPlayingMusic;
     });
 
-    // Lluvia de Pétalos
+    // Lluvia de Pétalos Amarillos sobresaliente
     document.getElementById('petals-btn').addEventListener('click', () => {
-      for (let i = 0; i < 45; i++) {
+      for (let i = 0; i < 50; i++) {
         petals.push(new Petal());
       }
     });
 
-    // Lluvia de Corazones
+    // Lluvia de Corazones sobresaliente
     document.getElementById('hearts-btn').addEventListener('click', () => {
-      for (let i = 0; i < 35; i++) {
+      for (let i = 0; i < 40; i++) {
         hearts.push(new Heart());
       }
     });
 
-    // Reiniciar
+    // Reiniciar Jardín
     document.getElementById('clear-btn').addEventListener('click', () => {
       flowers = [];
       butterflies = [];
+      spawnGarden();
     });
 
     // Cambiar Foto de Pareja
