@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>¡Feliz Día de la Primavera! 🌸</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>¡Feliz Día de la Primavera y Flores Amarillas! 🌻💛</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  
   <style>
     * {
       margin: 0;
@@ -14,23 +15,26 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      overflow: hidden;
-      background: radial-gradient(circle at bottom, #1e293b, #0f172a);
-      height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: radial-gradient(circle at bottom, #2d0b1e 0%, #170713 50%, #0a0208 100%);
+      min-height: 100vh;
+      color: #fff;
       user-select: none;
     }
 
-    /* PANTALLA DE BIENVENIDA (ELEGANTE) */
+    /* PANTALLA DE BIENVENIDA ROMÁNTICA */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.88);
-      backdrop-filter: blur(12px);
+      background: rgba(15, 5, 12, 0.92);
+      backdrop-filter: blur(15px);
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 100;
+      z-index: 1000;
       transition: opacity 1s ease, visibility 1s ease;
+      padding: 1.5rem;
     }
 
     .overlay.hidden {
@@ -40,30 +44,48 @@
     }
 
     .envelope-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(254, 243, 199, 0.9));
       padding: 3rem 2rem;
-      border-radius: 24px;
+      border-radius: 28px;
       text-align: center;
-      max-width: 450px;
-      margin: 0 1rem;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(236, 72, 153, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      transform: translateY(0);
-      animation: float 4s ease-in-out infinite;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(251, 191, 36, 0.4);
+      border: 2px solid rgba(251, 191, 36, 0.5);
+      animation: floatEnvelope 4s ease-in-out infinite;
     }
 
-    .flower-icon {
+    @keyframes floatEnvelope {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.01); }
+    }
+
+    .flower-icon-header {
       font-size: 4rem;
-      margin-bottom: 1rem;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+      margin-bottom: 0.8rem;
+      filter: drop-shadow(0 8px 15px rgba(217, 119, 6, 0.4));
+      display: inline-block;
+      animation: pulseFlower 2s infinite alternate;
+    }
+
+    @keyframes pulseFlower {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.15) rotate(5deg); }
     }
 
     .envelope-card h1 {
       font-family: 'Great Vibes', cursive;
-      color: #be185d;
-      font-size: 2.8rem;
-      margin-bottom: 0.5rem;
-      font-weight: 400;
+      color: #b45309;
+      font-size: 3.2rem;
+      margin-bottom: 0.3rem;
+      line-height: 1.1;
+    }
+
+    .envelope-card h2 {
+      font-family: 'Dancing Script', cursive;
+      color: #e11d48;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
     }
 
     .envelope-card p {
@@ -73,223 +95,529 @@
       margin-bottom: 2rem;
     }
 
-    /* BOTONES ESTILIZADOS */
-    button {
-      background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #e11d48 100%);
       color: white;
       border: none;
-      padding: 0.9rem 2.2rem;
+      padding: 1rem 2.5rem;
       border-radius: 50px;
       font-weight: 600;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       cursor: pointer;
-      box-shadow: 0 10px 25px rgba(244, 63, 94, 0.4);
-      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    button:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 15px 30px rgba(244, 63, 94, 0.6);
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 18px 35px rgba(245, 158, 11, 0.6);
     }
 
-    /* CANVAS DE JARDÍN */
+    /* CANVAS DEL JARDÍN */
     #garden-canvas {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       z-index: 1;
+      pointer-events: auto;
     }
 
-    /* INTERFAZ DE USUARIO */
-    .ui-container {
+    /* LAYOUT Y PANELES */
+    .app-container {
       position: relative;
       z-index: 10;
+      width: 100%;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 2rem;
+      justify-content: space-between;
+      padding: 1.5rem 1rem 2rem 1rem;
       pointer-events: none;
     }
 
+    /* TARJETA DE MENSAJE PRINCIPAL */
     .message-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(16px);
-      padding: 1.8rem 2.5rem;
-      border-radius: 20px;
+      background: rgba(20, 10, 18, 0.75);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      padding: 2rem;
       text-align: center;
-      max-width: 600px;
-      margin: 0 1rem;
+      max-width: 650px;
+      width: 95%;
+      margin: 0.5rem auto 1.5rem auto;
       pointer-events: auto;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(245, 158, 11, 0.25);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .message-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #f59e0b, #e11d48, #ec4899, #f59e0b);
+      background-size: 200% 100%;
+      animation: gradientMove 4s linear infinite;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
     }
 
     .message-card h1 {
       font-family: 'Great Vibes', cursive;
-      color: #be185d;
-      font-size: 3rem;
-      margin-bottom: 0.3rem;
-      font-weight: 400;
+      color: #fbbf24;
+      font-size: 3.2rem;
+      margin-bottom: 0.4rem;
+      text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
     }
 
     .message-card p {
-      color: #334155;
-      font-size: 1.05rem;
-      line-height: 1.6;
-      margin-bottom: 1rem;
+      color: #f1f5f9;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 1.2rem;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.45rem;
     }
 
-    #edit-btn {
-      background: #f1f5f9;
-      color: #475569;
-      font-size: 0.85rem;
-      padding: 0.4rem 1.2rem;
-      box-shadow: none;
-      border: 1px solid #cbd5e1;
+    .edit-btn {
+      background: rgba(251, 191, 36, 0.15);
+      color: #fef08a;
+      font-size: 0.9rem;
+      padding: 0.5rem 1.4rem;
+      border-radius: 30px;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
     }
 
-    #edit-btn:hover {
-      background: #e2e8f0;
+    .edit-btn:hover {
+      background: rgba(251, 191, 36, 0.3);
+      color: #ffffff;
+      transform: scale(1.05);
     }
 
-    .action-buttons {
-      margin-top: 1.2rem;
-      display: flex;
-      gap: 12px;
+    /* CARRUSEL DE FOTOS ROMÁNTICAS DE PAREJA */
+    .photo-gallery-section {
+      width: 100%;
+      max-width: 850px;
+      margin: 1rem 0;
       pointer-events: auto;
     }
 
-    .icon-btn {
-      background: rgba(255, 255, 255, 0.9);
-      color: #1e293b;
-      padding: 0.7rem 1.4rem;
-      border-radius: 30px;
-      font-size: 0.95rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    .gallery-container {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      padding: 1rem 0.5rem 1.5rem 0.5rem;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #f59e0b rgba(255,255,255,0.1);
     }
 
-    /* MODAL DE EDICIÓN */
+    .gallery-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .gallery-container::-webkit-scrollbar-thumb {
+      background: #f59e0b;
+      border-radius: 10px;
+    }
+
+    .photo-frame {
+      min-width: 220px;
+      height: 280px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 10px 10px 35px 10px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 20px rgba(251, 191, 36, 0.2);
+      transform: rotate(calc(var(--r, 0) * 1deg));
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .photo-frame:hover {
+      transform: scale(1.08) rotate(0deg) translateY(-8px);
+      z-index: 20;
+      box-shadow: 0 25px 45px rgba(0,0,0,0.6), 0 0 30px rgba(244, 63, 94, 0.5);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .photo-caption {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: #475569;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .add-photo-card {
+      min-width: 180px;
+      height: 280px;
+      border-radius: 20px;
+      border: 2px dashed rgba(251, 191, 36, 0.6);
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #fde047;
+    }
+
+    .add-photo-card:hover {
+      background: rgba(251, 191, 36, 0.15);
+      border-color: #f59e0b;
+      transform: translateY(-5px);
+    }
+
+    /* BARRA DE BOTONES DE ACCIÓN */
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      pointer-events: auto;
+      margin-top: 0.5rem;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 0.75rem 1.4rem;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-btn:hover {
+      background: rgba(251, 191, 36, 0.25);
+      border-color: #fbbf24;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(245, 158, 11, 0.35);
+    }
+
+    .action-btn.active {
+      background: linear-gradient(135deg, #f59e0b, #e11d48);
+      border-color: transparent;
+    }
+
+    /* MODAL DE EDICIÓN Y AGREGAR FOTO */
     .modal-hidden {
       display: none !important;
     }
 
-    #modal-overlay {
+    .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(8px);
+      background: rgba(10, 3, 8, 0.82);
+      backdrop-filter: blur(10px);
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 200;
+      z-index: 2000;
+      padding: 1rem;
     }
 
     .modal-card {
-      background: white;
+      background: #1e111d;
+      border: 1px solid rgba(251, 191, 36, 0.4);
       padding: 2.2rem;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 480px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 30px rgba(245, 158, 11, 0.3);
       display: flex;
       flex-direction: column;
       gap: 1.2rem;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
     }
 
     .modal-card h2 {
-      color: #1e293b;
-      font-size: 1.4rem;
+      color: #fbbf24;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5rem;
+      text-align: center;
+    }
+
+    .modal-card label {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: -8px;
     }
 
     .modal-card input, .modal-card textarea {
       width: 100%;
       padding: 0.9rem;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: white;
       font-family: inherit;
       font-size: 0.95rem;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    .modal-card input:focus, .modal-card textarea:focus {
+      border-color: #f59e0b;
     }
 
     .modal-actions {
       display: flex;
       justify-content: flex-end;
       gap: 12px;
+      margin-top: 0.5rem;
     }
 
-    #cancel-btn {
-      background: #94a3b8;
-      box-shadow: none;
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* SECTOR DE MÚSICA INDICADOR */
+    .music-badge {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 100;
+      background: rgba(20, 10, 18, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fef08a;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .music-waves span {
+      display: inline-block;
+      width: 3px;
+      height: 12px;
+      background: #f59e0b;
+      margin: 0 1px;
+      border-radius: 3px;
+      animation: wave 1.2s ease-in-out infinite;
+    }
+
+    .music-waves span:nth-child(2) { animation-delay: 0.2s; }
+    .music-waves span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes wave {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+
+    .music-paused .music-waves span {
+      animation: none;
+      height: 4px;
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 640px) {
+      .envelope-card h1 { font-size: 2.6rem; }
+      .message-card h1 { font-size: 2.5rem; }
+      .message-card p { font-size: 1.2rem; }
+      .photo-frame { min-width: 170px; height: 230px; }
+      .add-photo-card { min-width: 150px; height: 230px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ELEMENTO DE AUDIO MP3 REAL -->
+  <!-- AUDIO MP3 CARGADO -->
   <audio id="bg-music" loop preload="auto">
-  <source src="./Ed Sheeran - photograph sub español.mp3" type="audio/mpeg">
-</audio>
+    <source src="./Ed Sheeran - photograph sub español.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- INDICADOR FLOTANTE DE MÚSICA -->
+  <div class="music-badge music-paused" id="music-indicator">
+    <div class="music-waves">
+      <span></span><span></span><span></span>
+    </div>
+    <span id="music-status-text">Photograph - Ed Sheeran</span>
+  </div>
 
   <!-- PANTALLA DE BIENVENIDA -->
   <div id="intro-overlay" class="overlay">
     <div class="envelope-card">
-      <div class="flower-icon">🌸</div>
-      <h1>Un regalo especial para ti</h1>
-      <p>Abre esta sorpresa para hacer florecer un jardín mágico con música y mariposas.</p>
-      <button id="start-btn">✨ Abrir Sorpresa ✨</button>
+      <div class="flower-icon-header">🌻✨</div>
+      <h1>Día de la Primavera</h1>
+      <h2>& Flores Amarillas</h2>
+      <p>Una dedicatoria de amor mágica, llena de colores, fotos e instantes eternos para ti.</p>
+      <button id="start-btn" class="btn-primary">
+        <span>✨ Abrir mi Regalo Mágico ✨</span>
+      </button>
     </div>
   </div>
 
-  <!-- JARDÍN INTERACTIVO -->
-  <div id="main-content">
-    <canvas id="garden-canvas"></canvas>
+  <!-- CANVAS DE JARDÍN MÁGICO -->
+  <canvas id="garden-canvas"></canvas>
 
-    <div class="ui-container">
-      <div class="message-card">
-        <h1 id="title-text">¡Feliz Día de la Primavera! 🌷</h1>
-        <p id="message-text">Que este nuevo ciclo florezca lleno de alegría, amor, luz y colores para tu vida.</p>
-        <button id="edit-btn">✏️ Personalizar Mensaje</button>
-      </div>
+  <!-- CONTENIDO Y INTERFAZ DE USUARIO -->
+  <div class="app-container">
+    
+    <!-- TARJETA DE DEDICATORIA -->
+    <div class="message-card">
+      <h1 id="title-text">¡Feliz Día de la Primavera mi Amor! 🌻💛</h1>
+      <p id="message-text">"Te regalo flores amarillas hoy y siempre para recordarte que tu luz ilumina todo mi mundo. Gracias por hacer florecer cada rincón de mi vida."</p>
+      <button id="edit-btn" class="edit-btn">✏️ Personalizar Dedicatoria</button>
+    </div>
 
-      <div class="action-buttons">
-        <button id="music-btn" class="icon-btn">🎵 Música On</button>
-        <button id="petals-btn" class="icon-btn">🌸 Lluvia de Pétalos</button>
-        <button id="clear-btn" class="icon-btn">🔄 Reiniciar Jardín</button>
+    <!-- GALERÍA DE FOTOS ROMÁNTICAS DE PAREJA -->
+    <div class="photo-gallery-section">
+      <div class="gallery-container" id="gallery-container">
+        
+        <!-- FOTO 1 -->
+        <div class="photo-frame" style="--r: -3">
+          <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80" alt="Amor 1" onerror="this.src='https://placehold.co/400x500/f59e0b/ffffff?text=Tu+Foto+Aqui'">
+          <div class="photo-caption">Nuestra Luz 💛</div>
+        </div>
+
+        <!-- FOTO 2 -->
+        <div class="photo-frame" style="--r: 2">
+          <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" alt="Amor 2" onerror="this.src='https://placehold.co/400x500/ec4899/ffffff?text=Momento+Especial'">
+          <div class="photo-caption">Siempre Juntos 🌸</div>
+        </div>
+
+        <!-- FOTO 3 -->
+        <div class="photo-frame" style="--r: -2">
+          <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80" alt="Amor 3" onerror="this.src='https://placehold.co/400x500/38bdf8/ffffff?text=Te+Amo'">
+          <div class="photo-caption">Flores & Sonrisas 🌻</div>
+        </div>
+
+        <!-- BOTÓN PARA AGREGAR FOTOS DE PAREJA -->
+        <div class="add-photo-card" id="add-photo-btn">
+          <span style="font-size: 2.2rem;">📷</span>
+          <span style="font-size: 0.9rem; font-weight: 500;">Añadir Foto</span>
+        </div>
+
       </div>
     </div>
+
+    <!-- CONTROLES E INTERACCIONES -->
+    <div class="controls-bar">
+      <button id="music-btn" class="action-btn">
+        <span>🎵</span> <span id="music-btn-text">Música On</span>
+      </button>
+      <button id="sunflower-btn" class="action-btn">
+        <span>🌻</span> Girasol Gigante
+      </button>
+      <button id="petals-btn" class="action-btn">
+        <span>💛</span> Pétalos Amarillos
+      </button>
+      <button id="hearts-btn" class="action-btn">
+        <span>💖</span> Lluvia de Corazones
+      </button>
+      <button id="clear-btn" class="action-btn">
+        <span>🌱</span> Reiniciar Jardín
+      </button>
+    </div>
+
   </div>
 
-  <!-- MODAL DE EDICIÓN -->
-  <div id="modal-overlay" class="modal-hidden">
+  <!-- MODAL DE EDICIÓN DE TEXTO -->
+  <div id="modal-text-overlay" class="modal-overlay modal-hidden">
     <div class="modal-card">
-      <h2>Escribe tu Dedicatoria</h2>
-      <input type="text" id="input-title" placeholder="Título (Ej: ¡Feliz Día mi Amor!)">
-      <textarea id="input-message" rows="4" placeholder="Escribe tu mensaje personalizado aquí..."></textarea>
+      <h2>Dedicatoria Romántica</h2>
+      <div>
+        <label>Título:</label>
+        <input type="text" id="input-title" placeholder="Ej: ¡Feliz Día mi Vida!">
+      </div>
+      <div>
+        <label>Mensaje de Amor:</label>
+        <textarea id="input-message" rows="4" placeholder="Escribe tu mensaje personalizado aquí..."></textarea>
+      </div>
       <div class="modal-actions">
-        <button id="save-btn">Guardar</button>
-        <button id="cancel-btn">Cancelar</button>
+        <button id="cancel-text-btn" class="btn-secondary">Cancelar</button>
+        <button id="save-text-btn" class="btn-primary" style="padding: 0.7rem 1.8rem;">Guardar</button>
       </div>
     </div>
   </div>
 
+  <!-- MODAL PARA AÑADIR FOTO -->
+  <div id="modal-photo-overlay" class="modal-overlay modal-hidden">
+    <div class="modal-card">
+      <h2>Añadir Foto de Pareja</h2>
+      <div>
+        <label>URL de la imagen (o pega un enlace):</label>
+        <input type="text" id="input-photo-url" placeholder="https://ejemplo.com/tu-foto.jpg">
+      </div>
+      <div>
+        <label>Seleccionar archivo local:</label>
+        <input type="file" id="input-photo-file" accept="image/*" style="padding: 0.5rem;">
+      </div>
+      <div>
+        <label>Leyenda / Título de la foto:</label>
+        <input type="text" id="input-photo-caption" placeholder="Ej: Nuestro mejor viaje 💛">
+      </div>
+      <div class="modal-actions">
+        <button id="cancel-photo-btn" class="btn-secondary">Cancelar</button>
+        <button id="save-photo-btn" class="btn-primary" style="padding: 0.7rem 1.8rem;">Añadir Foto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LÓGICA DE SIMULACIÓN CANVAS & INTERACTIVIDAD -->
   <script>
     const canvas = document.getElementById('garden-canvas');
     const ctx = canvas.getContext('2d');
     const bgMusic = document.getElementById('bg-music');
+    const musicIndicator = document.getElementById('music-indicator');
+    const musicStatusText = document.getElementById('music-status-text');
 
     let flowers = [];
     let petals = [];
+    let hearts = [];
     let butterflies = [];
     let sparkles = [];
     let isPlayingMusic = false;
     let time = 0;
 
+    // Configuración del tamaño responsivo
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -297,29 +625,50 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    /* --- CLASE FLOR PROFESIONAL --- */
+    /* --- CLASE DIVERSIDAD DE FLORES EN CANVAS --- */
     class Flower {
-      constructor(x, y) {
+      constructor(x, targetY, type = 'random') {
         this.x = x;
         this.y = window.innerHeight;
-        this.targetY = y;
+        this.targetY = targetY;
         this.stemHeight = 0;
-        this.maxStemHeight = window.innerHeight - y;
+        this.maxStemHeight = window.innerHeight - targetY;
         this.petalProgress = 0;
-        this.maxPetalSize = Math.random() * 22 + 25;
-        this.petalCount = Math.floor(Math.random() * 3) * 2 + 8; // 8, 10 o 12 pétalos
         
-        // Paletas de color románticas con gradiente
-        const colors = [
-          { inner: '#f43f5e', outer: '#fbcfe8' }, // Rosa intenso
-          { inner: '#d946ef', outer: '#f5d0fe' }, // Violeta / Púrpura
-          { inner: '#fbbf24', outer: '#fef3c7' }, // Amarillo primavera
-          { inner: '#fb7185', outer: '#ffe4e6' }, // Coral suave
-          { inner: '#38bdf8', outer: '#e0f2fe' }  // Azul cielo
-        ];
-        this.palette = colors[Math.floor(Math.random() * colors.length)];
-        this.growthSpeed = Math.random() * 3 + 3;
-        this.swayOffset = Math.random() * 100;
+        // Tipos de flor: 'sunflower' (girasol), 'yellow_rose', 'daisy', 'red_rose', 'tulip'
+        const types = ['sunflower', 'yellow_rose', 'daisy', 'red_rose', 'tulip'];
+        this.type = (type === 'random') ? types[Math.floor(Math.random() * types.length)] : type;
+
+        // Configurar tamaños y colores según el tipo
+        if (this.type === 'sunflower') {
+          this.maxPetalSize = Math.random() * 20 + 35;
+          this.petalCount = 20;
+          this.centerSize = this.maxPetalSize * 0.7;
+          this.colors = { petal: '#f59e0b', outerPetal: '#fbbf24', center: '#451a03' };
+        } else if (this.type === 'yellow_rose') {
+          this.maxPetalSize = Math.random() * 15 + 28;
+          this.petalCount = 14;
+          this.centerSize = this.maxPetalSize * 0.35;
+          this.colors = { petal: '#eab308', outerPetal: '#fef08a', center: '#ca8a04' };
+        } else if (this.type === 'daisy') {
+          this.maxPetalSize = Math.random() * 12 + 22;
+          this.petalCount = 16;
+          this.centerSize = this.maxPetalSize * 0.45;
+          this.colors = { petal: '#ffffff', outerPetal: '#fef9c3', center: '#eab308' };
+        } else if (this.type === 'red_rose') {
+          this.maxPetalSize = Math.random() * 15 + 26;
+          this.petalCount = 12;
+          this.centerSize = this.maxPetalSize * 0.3;
+          this.colors = { petal: '#e11d48', outerPetal: '#f43f5e', center: '#881337' };
+        } else { // tulip
+          this.maxPetalSize = Math.random() * 16 + 28;
+          this.petalCount = 6;
+          this.centerSize = this.maxPetalSize * 0.25;
+          this.colors = { petal: '#ec4899', outerPetal: '#fbcfe8', center: '#be185d' };
+        }
+
+        this.growthSpeed = Math.random() * 3 + 3.5;
+        this.swayOffset = Math.random() * 200;
       }
 
       update() {
@@ -331,86 +680,92 @@
       }
 
       draw() {
-        // Balanceo natural del viento
-        const sway = Math.sin(time * 0.002 + this.swayOffset) * 12 * (this.stemHeight / this.maxStemHeight);
+        // Movimiento de viento
+        const sway = Math.sin(time * 0.002 + this.swayOffset) * 14 * (this.stemHeight / this.maxStemHeight);
         const flowerHeadX = this.x + sway;
         const currentY = window.innerHeight - this.stemHeight;
 
-        // Tallo con gradiente y curva suave
+        // Tallo suave
         const stemGrad = ctx.createLinearGradient(this.x, window.innerHeight, flowerHeadX, currentY);
-        stemGrad.addColorStop(0, '#15803d');
-        stemGrad.addColorStop(1, '#4ade80');
+        stemGrad.addColorStop(0, '#14532d');
+        stemGrad.addColorStop(1, '#22c55e');
 
         ctx.beginPath();
         ctx.moveTo(this.x, window.innerHeight);
         ctx.quadraticCurveTo(this.x + sway * 0.5, window.innerHeight - this.stemHeight * 0.5, flowerHeadX, currentY);
         ctx.strokeStyle = stemGrad;
-        ctx.lineWidth = 5;
+        ctx.lineWidth = this.type === 'sunflower' ? 7 : 5;
         ctx.stroke();
 
-        // Hojas en el tallo
-        if (this.stemHeight > this.maxStemHeight * 0.5) {
+        // Hoja en tallo
+        if (this.stemHeight > this.maxStemHeight * 0.4) {
           ctx.save();
-          ctx.translate(this.x + sway * 0.3, window.innerHeight - this.stemHeight * 0.4);
+          ctx.translate(this.x + sway * 0.3, window.innerHeight - this.stemHeight * 0.45);
           ctx.rotate(0.3);
           ctx.beginPath();
           ctx.ellipse(0, 0, 18, 7, 0, 0, Math.PI * 2);
-          ctx.fillStyle = '#22c55e';
+          ctx.fillStyle = '#15803d';
           ctx.fill();
           ctx.restore();
         }
 
-        // Cabeza de la Flor (Pétalos con sombras y gradientes)
+        // Cabeza de la flor
         if (this.petalProgress > 0) {
           ctx.save();
           ctx.translate(flowerHeadX, currentY);
-          
-          const currentPetalSize = this.maxPetalSize * this.petalProgress;
 
+          const currentSize = this.maxPetalSize * this.petalProgress;
+
+          // Dibujar pétalos
           for (let i = 0; i < this.petalCount; i++) {
             const angle = (Math.PI * 2 / this.petalCount) * i;
             ctx.save();
             ctx.rotate(angle);
 
-            // Gradiente para cada pétalo
-            const petalGrad = ctx.createRadialGradient(0, 0, 0, 0, currentPetalSize, currentPetalSize);
-            petalGrad.addColorStop(0, this.palette.inner);
-            petalGrad.addColorStop(1, this.palette.outer);
+            const petalGrad = ctx.createRadialGradient(0, 0, 0, 0, currentSize, currentSize);
+            petalGrad.addColorStop(0, this.colors.petal);
+            petalGrad.addColorStop(1, this.colors.outerPetal);
 
             ctx.beginPath();
-            ctx.ellipse(0, currentPetalSize * 0.7, currentPetalSize * 0.35, currentPetalSize * 0.7, 0, 0, Math.PI * 2);
+            if (this.type === 'tulip') {
+              ctx.ellipse(0, currentSize * 0.6, currentSize * 0.4, currentSize * 0.8, 0, 0, Math.PI * 2);
+            } else {
+              ctx.ellipse(0, currentSize * 0.7, currentSize * 0.3, currentSize * 0.75, 0, 0, Math.PI * 2);
+            }
             ctx.fillStyle = petalGrad;
-            ctx.shadowColor = 'rgba(0,0,0,0.15)';
-            ctx.shadowBlur = 8;
+            ctx.shadowColor = 'rgba(0,0,0,0.2)';
+            ctx.shadowBlur = 6;
             ctx.fill();
             ctx.restore();
           }
 
-          // Centro con polen detallado
-          const centerGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, currentPetalSize * 0.35);
+          // Centro polen
+          const centerGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, this.centerSize);
           centerGrad.addColorStop(0, '#fef08a');
-          centerGrad.addColorStop(1, '#ca8a04');
+          centerGrad.addColorStop(1, this.colors.center);
 
           ctx.beginPath();
-          ctx.arc(0, 0, currentPetalSize * 0.35, 0, Math.PI * 2);
+          ctx.arc(0, 0, this.centerSize * this.petalProgress, 0, Math.PI * 2);
           ctx.fillStyle = centerGrad;
+          ctx.shadowBlur = 4;
           ctx.fill();
+
           ctx.restore();
         }
       }
     }
 
-    /* --- CLASE MARIPOSA ANIMADA --- */
+    /* --- MARIPOSAS ANIMADAS --- */
     class Butterfly {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * (canvas.height * 0.6);
-        this.size = Math.random() * 6 + 10;
-        this.vx = (Math.random() - 0.5) * 1.5;
-        this.vy = (Math.random() - 0.5) * 1.5;
+        this.size = Math.random() * 8 + 12;
+        this.vx = (Math.random() - 0.5) * 1.8;
+        this.vy = (Math.random() - 0.5) * 1.8;
         this.wingAngle = 0;
-        this.wingSpeed = Math.random() * 0.15 + 0.1;
-        this.color = ['#f472b6', '#38bdf8', '#fbbf24', '#c084fc'][Math.floor(Math.random() * 4)];
+        this.wingSpeed = Math.random() * 0.15 + 0.12;
+        this.color = ['#f59e0b', '#ec4899', '#38bdf8', '#fbbf24'][Math.floor(Math.random() * 4)];
       }
 
       update() {
@@ -418,10 +773,10 @@
         this.y += this.vy + Math.cos(time * 0.003);
         this.wingAngle += this.wingSpeed;
 
-        if (this.x < -20) this.x = canvas.width + 20;
-        if (this.x > canvas.width + 20) this.x = -20;
-        if (this.y < -20) this.y = canvas.height * 0.7;
-        if (this.y > canvas.height * 0.7) this.y = 50;
+        if (this.x < -30) this.x = canvas.width + 30;
+        if (this.x > canvas.width + 30) this.x = -30;
+        if (this.y < -30) this.y = canvas.height * 0.8;
+        if (this.y > canvas.height * 0.8) this.y = 40;
       }
 
       draw() {
@@ -434,7 +789,7 @@
         ctx.save();
         ctx.scale(wingScale, 1);
         ctx.beginPath();
-        ctx.ellipse(-this.size * 0.8, -this.size * 0.5, this.size * 0.9, this.size * 0.6, Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(-this.size * 0.8, -this.size * 0.4, this.size * 0.8, this.size * 0.5, Math.PI / 4, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.restore();
@@ -443,14 +798,14 @@
         ctx.save();
         ctx.scale(wingScale, 1);
         ctx.beginPath();
-        ctx.ellipse(this.size * 0.8, -this.size * 0.5, this.size * 0.9, this.size * 0.6, -Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(this.size * 0.8, -this.size * 0.4, this.size * 0.8, this.size * 0.5, -Math.PI / 4, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.restore();
 
         // Cuerpo
         ctx.beginPath();
-        ctx.ellipse(0, 0, 2, this.size * 0.8, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, 2, this.size * 0.7, 0, 0, Math.PI * 2);
         ctx.fillStyle = '#0f172a';
         ctx.fill();
 
@@ -458,16 +813,17 @@
       }
     }
 
-    /* --- CLASE PÉTALOS Y DESTELLOS --- */
+    /* --- PÉTALOS Y CORAZONES CAYENDO --- */
     class Petal {
-      constructor() {
+      constructor(colorType = 'yellow') {
         this.x = Math.random() * canvas.width;
         this.y = -20;
-        this.size = Math.random() * 8 + 6;
-        this.speedY = Math.random() * 1.5 + 1;
-        this.speedX = Math.random() * 1.5 - 0.75;
+        this.size = Math.random() * 9 + 6;
+        this.speedY = Math.random() * 1.8 + 1;
+        this.speedX = Math.random() * 1.6 - 0.8;
         this.rotation = Math.random() * 360;
-        this.rotSpeed = Math.random() * 0.03 - 0.015;
+        this.rotSpeed = Math.random() * 0.04 - 0.02;
+        this.color = colorType === 'yellow' ? 'rgba(251, 191, 36, 0.85)' : 'rgba(244, 63, 94, 0.85)';
       }
 
       update() {
@@ -482,7 +838,41 @@
         ctx.rotate(this.rotation);
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size * 0.5, 0, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(251, 113, 133, 0.85)';
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    class Heart {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = -20;
+        this.size = Math.random() * 12 + 10;
+        this.speedY = Math.random() * 1.5 + 1.2;
+        this.speedX = Math.random() * 1.4 - 0.7;
+        this.opacity = Math.random() * 0.5 + 0.5;
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX + Math.sin(time * 0.003) * 0.8;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = '#f43f5e';
+
+        ctx.beginPath();
+        const topCurveHeight = this.size * 0.3;
+        ctx.moveTo(0, topCurveHeight);
+        // Lado izquierdo del corazón
+        ctx.bezierCurveTo(-this.size / 2, -topCurveHeight, -this.size, this.size / 3, 0, this.size);
+        // Lado derecho del corazón
+        ctx.bezierCurveTo(this.size, this.size / 3, this.size / 2, -topCurveHeight, 0, topCurveHeight);
+        ctx.closePath();
         ctx.fill();
         ctx.restore();
       }
@@ -492,9 +882,9 @@
       constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = Math.random() * 3 + 1;
+        this.size = Math.random() * 4 + 2;
         this.alpha = 1;
-        this.decay = Math.random() * 0.02 + 0.01;
+        this.decay = Math.random() * 0.03 + 0.015;
       }
 
       update() {
@@ -507,31 +897,34 @@
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = '#fef08a';
-        ctx.shadowColor = '#fef08a';
-        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#f59e0b';
+        ctx.shadowBlur = 10;
         ctx.fill();
         ctx.restore();
       }
     }
 
-    /* --- BUCLE DE ANIMACIÓN PRINCIPAL --- */
+    /* --- BUCLE PRINCIPAL DE ANIMACIÓN --- */
     function animate(timestamp) {
       time = timestamp || 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Dibujar elementos en orden
+      // Dibujar elementos
       flowers.forEach(f => { f.update(); f.draw(); });
       butterflies.forEach(b => { b.update(); b.draw(); });
 
       petals.forEach((p, idx) => {
-        p.update();
-        p.draw();
+        p.update(); p.draw();
         if (p.y > canvas.height + 20) petals.splice(idx, 1);
       });
 
+      hearts.forEach((h, idx) => {
+        h.update(); h.draw();
+        if (h.y > canvas.height + 20) hearts.splice(idx, 1);
+      });
+
       sparkles.forEach((s, idx) => {
-        s.update();
-        s.draw();
+        s.update(); s.draw();
         if (s.alpha <= 0) sparkles.splice(idx, 1);
       });
 
@@ -539,37 +932,53 @@
     }
     animate();
 
-    /* --- INTERACCIONES --- */
+    /* --- GENERADOR DE JARDÍN INICIAL --- */
     function spawnGarden() {
       flowers = [];
-      const count = Math.floor(window.innerWidth / 130);
+      const count = Math.floor(window.innerWidth / 110);
       for (let i = 0; i < count; i++) {
         const x = (canvas.width / count) * i + Math.random() * 40 + 20;
-        const y = canvas.height - (Math.random() * 220 + 160);
-        flowers.push(new Flower(x, y));
+        const y = canvas.height - (Math.random() * 240 + 150);
+        flowers.push(new Flower(x, y, 'random'));
       }
 
       butterflies = [];
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 6; i++) {
         butterflies.push(new Butterfly());
       }
     }
 
+    // Interacción al hacer clic/tap en el canvas
     canvas.addEventListener('click', (e) => {
-      flowers.push(new Flower(e.clientX, e.clientY));
-      for (let i = 0; i < 8; i++) {
-        sparkles.push(new Sparkle(e.clientX + (Math.random() - 0.5) * 40, e.clientY + (Math.random() - 0.5) * 40));
+      // Crear flor donde se hace clic
+      flowers.push(new Flower(e.clientX, e.clientY, 'random'));
+
+      // Destellos
+      for (let i = 0; i < 12; i++) {
+        sparkles.push(new Sparkle(
+          e.clientX + (Math.random() - 0.5) * 50,
+          e.clientY + (Math.random() - 0.5) * 50
+        ));
       }
     });
 
+    // Mover ratón genera partículas suaves
+    canvas.addEventListener('mousemove', (e) => {
+      if (Math.random() > 0.6) {
+        sparkles.push(new Sparkle(e.clientX, e.clientY));
+      }
+    });
+
+    /* --- EVENTOS DE BOTONES --- */
     document.getElementById('start-btn').addEventListener('click', () => {
       document.getElementById('intro-overlay').classList.add('hidden');
       spawnGarden();
-      
-      // Reproducción de audio MP3
+
+      // Reproducción de audio
       bgMusic.play().then(() => {
         isPlayingMusic = true;
-        document.getElementById('music-btn').innerText = '🎵 Música On';
+        musicIndicator.classList.remove('music-paused');
+        document.getElementById('music-btn-text').innerText = 'Música On';
       }).catch(err => {
         console.log("Audio autostart bloqueado:", err);
       });
@@ -578,43 +987,110 @@
     document.getElementById('music-btn').addEventListener('click', () => {
       if (isPlayingMusic) {
         bgMusic.pause();
-        document.getElementById('music-btn').innerText = '🔇 Música Off';
+        musicIndicator.classList.add('music-paused');
+        document.getElementById('music-btn-text').innerText = 'Música Off';
       } else {
         bgMusic.play();
-        document.getElementById('music-btn').innerText = '🎵 Música On';
+        musicIndicator.classList.remove('music-paused');
+        document.getElementById('music-btn-text').innerText = 'Música On';
       }
       isPlayingMusic = !isPlayingMusic;
     });
 
+    // Botón Girasol Gigante
+    document.getElementById('sunflower-btn').addEventListener('click', () => {
+      const x = Math.random() * (canvas.width - 100) + 50;
+      const y = canvas.height - (Math.random() * 200 + 200);
+      flowers.push(new Flower(x, y, 'sunflower'));
+    });
+
+    // Botón Pétalos Amarillos
     document.getElementById('petals-btn').addEventListener('click', () => {
-      for (let i = 0; i < 40; i++) {
-        petals.push(new Petal());
+      for (let i = 0; i < 35; i++) {
+        petals.push(new Petal('yellow'));
       }
     });
 
+    // Botón Lluvia de Corazones
+    document.getElementById('hearts-btn').addEventListener('click', () => {
+      for (let i = 0; i < 25; i++) {
+        hearts.push(new Heart());
+      }
+    });
+
+    // Reiniciar
     document.getElementById('clear-btn').addEventListener('click', () => {
       flowers = [];
       butterflies = [];
+      petals = [];
+      hearts = [];
     });
 
-    /* MODAL DE EDICIÓN */
-    const modal = document.getElementById('modal-overlay');
+    /* --- GESTIÓN DE MODALES --- */
+    // Modal Texto
+    const textModal = document.getElementById('modal-text-overlay');
     document.getElementById('edit-btn').addEventListener('click', () => {
-      modal.classList.remove('modal-hidden');
+      textModal.classList.remove('modal-hidden');
     });
 
-    document.getElementById('cancel-btn').addEventListener('click', () => {
-      modal.classList.add('modal-hidden');
+    document.getElementById('cancel-text-btn').addEventListener('click', () => {
+      textModal.classList.add('modal-hidden');
     });
 
-    document.getElementById('save-btn').addEventListener('click', () => {
+    document.getElementById('save-text-btn').addEventListener('click', () => {
       const newTitle = document.getElementById('input-title').value;
       const newMessage = document.getElementById('input-message').value;
 
-      if (newTitle) document.getElementById('title-text').innerText = newTitle;
-      if (newMessage) document.getElementById('message-text').innerText = newMessage;
+      if (newTitle.trim()) document.getElementById('title-text').innerText = newTitle;
+      if (newMessage.trim()) document.getElementById('message-text').innerText = `"${newMessage}"`;
 
-      modal.classList.add('modal-hidden');
+      textModal.classList.add('modal-hidden');
+    });
+
+    // Modal Foto
+    const photoModal = document.getElementById('modal-photo-overlay');
+    document.getElementById('add-photo-btn').addEventListener('click', () => {
+      photoModal.classList.remove('modal-hidden');
+    });
+
+    document.getElementById('cancel-photo-btn').addEventListener('click', () => {
+      photoModal.classList.add('modal-hidden');
+    });
+
+    document.getElementById('save-photo-btn').addEventListener('click', () => {
+      const urlInput = document.getElementById('input-photo-url').value;
+      const fileInput = document.getElementById('input-photo-file');
+      const captionInput = document.getElementById('input-photo-caption').value || 'Amor 💛';
+
+      let imgSrc = urlInput;
+
+      if (fileInput.files && fileInput.files[0]) {
+        imgSrc = URL.createObjectURL(fileInput.files[0]);
+      }
+
+      if (imgSrc) {
+        const gallery = document.getElementById('gallery-container');
+        const addCard = document.getElementById('add-photo-btn');
+
+        const newFrame = document.createElement('div');
+        newFrame.className = 'photo-frame';
+        const rot = Math.floor(Math.random() * 8) - 4;
+        newFrame.style.setProperty('--r', rot);
+
+        newFrame.innerHTML = `
+          <img src="${imgSrc}" alt="Foto" onerror="this.src='https://placehold.co/400x500/f59e0b/ffffff?text=Tu+Foto'">
+          <div class="photo-caption">${captionInput}</div>
+        `;
+
+        gallery.insertBefore(newFrame, addCard);
+        
+        // Limpiar inputs
+        document.getElementById('input-photo-url').value = '';
+        document.getElementById('input-photo-file').value = '';
+        document.getElementById('input-photo-caption').value = '';
+      }
+
+      photoModal.classList.add('modal-hidden');
     });
   </script>
 </body>
